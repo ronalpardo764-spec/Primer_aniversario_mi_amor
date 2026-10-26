@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Primer Aniversario - Te amo Jhoselin</title>
-    <!-- Carga de Three.js y OrbitControls para el movimiento 3D con el clic -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <style>
@@ -140,20 +139,21 @@
             100% { transform: translate(-50%, -50%) scale(1); }
         }
 
-        /* Indicador interactivo inferior */
+        /* Barra de instrucciones inferior idéntica al video */
         .instruction-bar {
             position: absolute;
-            bottom: 20px;
+            bottom: 25px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(0,0,0,0.7);
-            border: 1px solid rgba(255,255,255,0.2);
-            padding: 8px 18px;
+            background: rgba(15, 15, 15, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 20px;
             border-radius: 20px;
             font-size: 0.85rem;
             color: #ddd;
             z-index: 50;
             pointer-events: none;
+            box-shadow: 0 0 15px rgba(0,0,0,0.8);
         }
     </style>
 </head>
@@ -175,7 +175,7 @@
     </div>
 
     <div class="instruction-bar">
-        🖱️ Haz clic y arrastra para rotar el universo en 3D
+        🖱️ Arrastra para girar el Universo 3D | Pasa sobre las fotos
     </div>
 
     <div id="canvas-container"></div>
@@ -215,7 +215,7 @@
             canvas.height = 64;
             const ctx = canvas.getContext('2d');
 
-            ctx.fillStyle = 'rgba(20, 20, 20, 0.85)';
+            ctx.fillStyle = 'rgba(15, 15, 15, 0.9)';
             ctx.strokeStyle = '#ff5252';
             ctx.lineWidth = 3;
             ctx.beginPath();
@@ -224,10 +224,32 @@
             ctx.stroke();
 
             ctx.fillStyle = '#ff8a80';
-            ctx.font = 'Bold 18px Arial';
+            ctx.font = 'Bold 16px Arial';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillText(texto, 128, 32);
+
+            return new THREE.CanvasTexture(canvas);
+        }
+
+        function crearMarcoPolaroid(texture) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 256;
+            canvas.height = 320;
+            const ctx = canvas.getContext('2d');
+
+            // Fondo tarjeta estilo Polaroid rojiza oscura
+            ctx.fillStyle = '#140a0a';
+            ctx.strokeStyle = '#ff1744';
+            ctx.lineWidth = 6;
+            ctx.fillRect(0, 0, 256, 320);
+            ctx.strokeRect(0, 0, 256, 320);
+
+            // Dibujar la imagen dentro del marco
+            const img = texture.image;
+            if (img) {
+                ctx.drawImage(img, 15, 15, 226, 226);
+            }
 
             return new THREE.CanvasTexture(canvas);
         }
@@ -236,69 +258,76 @@
             const container = document.getElementById('canvas-container');
             scene = new THREE.Scene();
 
-            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
-            camera.position.set(0, 0, 450);
+            camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
+            camera.position.set(0, 220, 500); // Vista en perspectiva inclinada idéntica al video
 
             renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(window.devicePixelRatio);
             container.appendChild(renderer.domElement);
 
-            // Permite rotar libremente el universo 3D al hacer clic y arrastrar
             controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
             controls.dampingFactor = 0.05;
             controls.rotateSpeed = 0.8;
 
-            // Fondo de estrellas
+            // Estrellas de fondo
             const starsGeometry = new THREE.BufferGeometry();
-            const starsCount = 1200;
+            const starsCount = 1500;
             const starPositions = new Float32Array(starsCount * 3);
             for(let i=0; i<starsCount*3; i++) {
-                starPositions[i] = (Math.random() - 0.5) * 1500;
+                starPositions[i] = (Math.random() - 0.5) * 1800;
             }
             starsGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
             const starsMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 1.5 });
             const starField = new THREE.Points(starsGeometry, starsMaterial);
             scene.add(starField);
 
-            // Cargar imágenes
             const textureLoader = new THREE.TextureLoader();
-            const fotos = ['foto1.jpg', 'foto2.jpg', 'foto3.jpg', 'foto4.jpg'];
+            const fotosUrls = ['foto1.jpg', 'foto2.jpg', 'foto3.jpg', 'foto4.jpg'];
 
-            // Crear 4 Órbitas 3D con mensajes y fotos
-            const radiors = [120, 200, 280, 360];
-            const speeds = [0.015, -0.01, 0.007, -0.005];
+            // Crear 4 Órbitas 3D inclinadas con anillos visibles
+            const radiors = [140, 230, 320, 410];
+            const speeds = [0.008, -0.006, 0.005, -0.004];
+            const tilts = [0.2, -0.3, 0.15, -0.2]; // Inclinación 3D característica del video
 
             radiors.forEach((radius, idx) => {
                 const orbitGroup = new THREE.Group();
+                orbitGroup.rotation.x = tilts[idx];
+                orbitGroup.rotation.z = tilts[idx] * 0.5;
                 scene.add(orbitGroup);
 
-                // Anillo visual de la órbita
-                const ringGeo = new THREE.RingGeometry(radius - 0.5, radius + 0.5, 64);
-                const ringMat = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide, transparent: true, opacity: 0.1 });
+                // Anillo brillante de la órbita
+                const ringGeo = new THREE.RingGeometry(radius - 0.8, radius + 0.8, 128);
+                const ringMat = new THREE.MeshBasicMaterial({ color: 0xff3366, side: THREE.DoubleSide, transparent: true, opacity: 0.25 });
                 const ringMesh = new THREE.Mesh(ringGeo, ringMat);
                 ringMesh.rotation.x = Math.PI / 2;
                 orbitGroup.add(ringMesh);
 
-                // Agregar elementos a esta órbita
-                let itemsCount = idx === 1 ? 12 : (idx === 0 ? 8 : 35);
+                // Cantidad de elementos por órbita
+                let itemsCount = idx === 1 ? 8 : (idx === 0 ? 6 : 28);
+                
                 for(let i=0; i<itemsCount; i++) {
                     const angle = (i / itemsCount) * Math.PI * 2;
                     let mesh;
 
-                    // En la órbita 2 colocamos las 4 fotos
-                    if (idx === 1 && i % 3 === 0 && (i/3) < 4) {
-                        const fotoIndex = Math.floor(i / 3);
-                        const texture = textureLoader.load(fotos[fotoIndex]);
-                        const geo = new THREE.PlaneGeometry(35, 35);
-                        const mat = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
-                        mesh = new THREE.Mesh(geo, mat);
+                    // En la órbita 2 colocamos las 4 fotos con marco Polaroid
+                    if (idx === 1 && i < 4) {
+                        const fotoUrl = fotosUrls[i];
+                        textureLoader.load(fotoUrl, (loadedTex) => {
+                            const polaroidTex = crearMarcoPolaroid(loadedTex);
+                            const geo = new THREE.PlaneGeometry(50, 62);
+                            const mat = new THREE.MeshBasicMaterial({ map: polaroidTex, side: THREE.DoubleSide });
+                            const photoMesh = new THREE.Mesh(geo, mat);
+                            photoMesh.position.set(Math.cos(angle) * radius, 0, Math.sin(angle) * radius);
+                            orbitGroup.add(photoMesh);
+                        });
+                        continue;
                     } else {
-                        // En las demás colocar los mensajes
-                        const msg = listaMensajes[(idx * 20 + i) % listaMensajes.length];
+                        // Mensajes de amor distribuidos
+                        const msg = listaMensajes[(idx * 25 + i) % listaMensajes.length];
                         const textTex = crearTextoTexture(msg);
-                        const geo = new THREE.PlaneGeometry(40, 10);
+                        const geo = new THREE.PlaneGeometry(45, 12);
                         const mat = new THREE.MeshBasicMaterial({ map: textTex, transparent: true, side: THREE.DoubleSide });
                         mesh = new THREE.Mesh(geo, mat);
                     }
@@ -325,7 +354,7 @@
 
             orbits.forEach(orbit => {
                 orbit.group.rotation.y += orbit.speed;
-                // Orientar cada sprite hacia la cámara para lectura perfecta
+                // Mantener los textos legibles orientados hacia la cámara
                 orbit.group.children.forEach(child => {
                     if (child.type === "Mesh" && child.geometry.type !== "RingGeometry") {
                         child.lookAt(camera.position);
