@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Primer Aniversario - Te amo Jhoselin</title>
+    <!-- Carga de Three.js y OrbitControls para el movimiento 3D con el clic -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <style>
         body, html {
             margin: 0;
@@ -50,14 +53,16 @@
             100% { transform: scale(1); box-shadow: 0 0 15px rgba(211, 47, 47, 0.6); }
         }
 
-        #main-content {
-            display: none;
-            position: relative;
+        #canvas-container {
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at center, #1a001a 0%, #030303 100%);
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
         }
 
+        /* Banner amarillo superior */
         .cuadro-amarillo {
             position: absolute;
             top: 25px;
@@ -72,8 +77,10 @@
             box-shadow: 0 0 20px rgba(255, 235, 59, 0.8);
             z-index: 50;
             text-align: center;
+            pointer-events: none;
         }
 
+        /* Corazón y mensaje central fijo */
         .universe-sun {
             position: absolute;
             top: 50%;
@@ -81,17 +88,18 @@
             transform: translate(-50%, -50%);
             text-align: center;
             z-index: 40;
+            pointer-events: none;
             animation: heartbeat 2s infinite;
         }
 
         .heart-shape {
             background-color: #ff1744;
             display: inline-block;
-            height: 70px;
+            height: 60px;
             margin: 0 10px;
             position: relative;
             transform: rotate(-45deg);
-            width: 70px;
+            width: 60px;
             box-shadow: 0 0 30px rgba(255, 23, 68, 0.9);
         }
 
@@ -100,27 +108,27 @@
             content: "";
             background-color: #ff1744;
             border-radius: 50%;
-            height: 70px;
+            height: 60px;
             position: absolute;
-            width: 70px;
+            width: 60px;
         }
 
-        .heart-shape:before { top: -35px; left: 0; }
-        .heart-shape:after { left: 35px; top: 0; }
+        .heart-shape:before { top: -30px; left: 0; }
+        .heart-shape:after { left: 30px; top: 0; }
 
         .sun-text {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: bold;
             color: white;
             text-shadow: 0 0 10px rgba(0,0,0,0.9);
             white-space: nowrap;
             z-index: 45;
             background: rgba(0, 0, 0, 0.6);
-            padding: 8px 15px;
+            padding: 6px 14px;
             border-radius: 20px;
         }
 
@@ -132,100 +140,20 @@
             100% { transform: translate(-50%, -50%) scale(1); }
         }
 
-        .orbit-system {
+        /* Indicador interactivo inferior */
+        .instruction-bar {
             position: absolute;
-            top: 50%;
+            bottom: 20px;
             left: 50%;
-            width: 0;
-            height: 0;
-            z-index: 20;
-        }
-
-        .orbit-ring {
-            position: absolute;
-            top: 50%; left: 50%;
-            border: 1px dashed rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.7);
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #ddd;
+            z-index: 50;
             pointer-events: none;
-        }
-
-        /* Órbitas expansivas */
-        .orbit-1 { width: 300px; height: 300px; margin: -150px 0 0 -150px; animation: rotateOrbit 30s linear infinite; }
-        .orbit-2 { width: 500px; height: 500px; margin: -250px 0 0 -250px; animation: rotateOrbit 45s linear infinite reverse; }
-        .orbit-3 { width: 700px; height: 700px; margin: -350px 0 0 -350px; animation: rotateOrbit 60s linear infinite; }
-        .orbit-4 { width: 900px; height: 900px; margin: -450px 0 0 -450px; animation: rotateOrbit 75s linear infinite reverse; }
-
-        .orbit-1 .orbit-ring { width: 300px; height: 300px; }
-        .orbit-2 .orbit-ring { width: 500px; height: 500px; }
-        .orbit-3 .orbit-ring { width: 700px; height: 700px; }
-        .orbit-4 .orbit-ring { width: 900px; height: 900px; }
-
-        @keyframes rotateOrbit {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .planet {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform-origin: center;
-        }
-
-        .floating-bubble {
-            background: rgba(15, 15, 15, 0.9);
-            border: 1px solid rgba(255, 82, 82, 0.6);
-            padding: 4px 8px;
-            border-radius: 8px;
-            font-size: 0.7rem;
-            color: #ff8a80;
-            white-space: nowrap;
-            box-shadow: 0 0 6px rgba(255, 82, 82, 0.3);
-        }
-
-        .orbit-1 .floating-bubble { animation: counterRotate 30s linear infinite; }
-        .orbit-2 .floating-bubble { animation: counterRotateReverse 45s linear infinite; }
-        .orbit-3 .floating-bubble { animation: counterRotate 60s linear infinite; }
-        .orbit-4 .floating-bubble { animation: counterRotateReverse 75s linear infinite; }
-
-        @keyframes counterRotate { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
-        @keyframes counterRotateReverse { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-        .orbit-photo-card {
-            background: rgba(20, 20, 20, 0.95);
-            border: 2px solid #ff1744;
-            border-radius: 10px;
-            padding: 5px;
-            text-align: center;
-            width: 95px;
-            box-shadow: 0 0 12px rgba(255, 23, 68, 0.7);
-            animation: counterRotateReverse 45s linear infinite;
-        }
-
-        .orbit-photo-card img {
-            width: 100%;
-            height: 70px;
-            object-fit: cover;
-            border-radius: 6px;
-        }
-
-        .orbit-photo-card p {
-            font-size: 0.55rem;
-            margin: 3px 0 0 0;
-            color: #ff8a80;
-            font-weight: bold;
-        }
-
-        .star {
-            position: absolute;
-            background-color: white;
-            border-radius: 50%;
-            animation: twinkle 2s infinite alternate;
-        }
-        @keyframes twinkle {
-            0% { opacity: 0.2; transform: scale(0.7); }
-            100% { opacity: 1; transform: scale(1.3); }
         }
     </style>
 </head>
@@ -237,127 +165,188 @@
         </div>
     </div>
 
-    <div id="main-content">
-        
-        <div class="star" style="top: 10%; left: 15%; width: 2px; height: 2px;"></div>
-        <div class="star" style="top: 25%; left: 85%; width: 3px; height: 3px; animation-delay: 1s;"></div>
-        <div class="star" style="top: 80%; left: 10%; width: 2px; height: 2px; animation-delay: 0.5s;"></div>
-        <div class="star" style="top: 90%; left: 80%; width: 3px; height: 3px; animation-delay: 1.5s;"></div>
-        <div class="star" style="top: 40%; left: 95%; width: 2px; height: 2px;"></div>
-        <div class="star" style="top: 60%; left: 5%; width: 2px; height: 2px; animation-delay: 0.8s;"></div>
-
-        <div class="cuadro-amarillo">
-            Eres mi universo ✨
-        </div>
-
-        <div class="universe-sun">
-            <div class="heart-shape"></div>
-            <div class="sun-text">Te amo Jhoselin ❤️</div>
-        </div>
-
-        <!-- ÓRBITA 1 (Cercana) -->
-        <div class="orbit-system orbit-1">
-            <div class="orbit-ring"></div>
-            <script>
-                const o1 = ["Mi lugar seguro", "Eres magia", "Te amo tanto", "Mi vida entera", "Ojos hermosos", "Contigo siempre", "Mi mundo", "Dueña de mí"];
-                for(let i=0; i<o1.length; i++){
-                    let ang = i * (360 / o1.length);
-                    document.write(`<div class="planet" style="transform: rotate(${ang}deg) translate(150px) rotate(-${ang}deg);"><div class="floating-bubble">💖 ${o1[i]}</div></div>`);
-                }
-            </script>
-        </div>
-
-        <!-- ÓRBITA 2 (Fotos + Mensajes) -->
-        <div class="orbit-system orbit-2">
-            <div class="orbit-ring"></div>
-            <!-- Fotos distribuidas -->
-            <div class="planet" style="transform: rotate(0deg) translate(250px) rotate(0deg);">
-                <div class="orbit-photo-card"><img src="foto1.jpg" alt="1"><p>Nuestro inicio</p></div>
-            </div>
-            <div class="planet" style="transform: rotate(90deg) translate(250px) rotate(-90deg);">
-                <div class="orbit-photo-card"><img src="foto2.jpg" alt="2"><p>Tus sonrisas</p></div>
-            </div>
-            <div class="planet" style="transform: rotate(180deg) translate(250px) rotate(-180deg);">
-                <div class="orbit-photo-card"><img src="foto3.jpg" alt="3"><p>Contigo todo</p></div>
-            </div>
-            <div class="planet" style="transform: rotate(270deg) translate(250px) rotate(-270deg);">
-                <div class="orbit-photo-card"><img src="foto4.jpg" alt="4"><p>Por siempre</p></div>
-            </div>
-            <!-- Mensajes intercalados en órbita 2 -->
-            <script>
-                const o2 = ["Mi razón de ser", "Latido mío", "Amor eterno", "Eres única", "Pura felicidad", "Te adoro", "Mi sol y luna", "Te amo Jhoselin"];
-                for(let i=0; i<o2.length; i++){
-                    let ang = (i * (360 / o2.length)) + 45;
-                    document.write(`<div class="planet" style="transform: rotate(${ang}deg) translate(250px) rotate(-${ang}deg);"><div class="floating-bubble">✨ ${o2[i]}</div></div>`);
-                }
-            </script>
-        </div>
-
-        <!-- ÓRBITA 3 (Amplia con 40 mensajes) -->
-        <div class="orbit-system orbit-3">
-            <div class="orbit-ring"></div>
-            <script>
-                const mensajes3 = [
-                    "Te amo infinito", "Mi dulce amor", "Eres mi paz", "Ojos bellos", "Mi princesa", 
-                    "Por siempre juntos", "Contigo soy feliz", "Mi gran fortuna", "Te necesito hoy", "Amor verdadero", 
-                    "Mi compañera", "Eres arte puro", "Sonrisa hermosa", "Mi gran tesoro", "Te pienso siempre", 
-                    "Dueña de mi alma", "Mi destino eres tú", "Magia pura", "Abrazo eterno", "Besos infinitos", 
-                    "Mi otra mitad", "Juntos la eternidad", "Te amo mi vida", "Primer aniversario", "Eres mi todo", 
-                    "Mi gran amor", "Cada día más", "Sueño contigo", "Te adoro", "Mi dulce Jhoselin", 
-                    "Luz en mi vida", "Corazón mío", "Eres única", "Mi refugio", "Para siempre", 
-                    "Te amo sin fin", "Mi felicidad", "Nuestra historia", "Feliz aniversario", "Te amo muchísimo"
-                ];
-                for (let i = 0; i < mensajes3.length; i++) {
-                    let angulo = (i * (360 / mensajes3.length));
-                    document.write(`<div class="planet" style="transform: rotate(${angulo}deg) translate(350px) rotate(-${angulo}deg);"><div class="floating-bubble">🌟 ${mensajes3[i]}</div></div>`);
-                }
-            </script>
-        </div>
-
-        <!-- ÓRBITA 4 (Externa masiva con más de 50 mensajes adicionales: ¡Más de 100 en total!) -->
-        <div class="orbit-system orbit-4">
-            <div class="orbit-ring"></div>
-            <script>
-                const mensajes4 = [
-                    "Te amo con locura", "Mi cielo entero", "Eres tan perfecta", "Dueña de mis días", "Amor de mi vida",
-                    "A tu lado todo es mejor", "Mi dulce tesoro", "Contigo hasta viejitos", "Te pienso a cada segundo", "Eres mi ilusión",
-                    "Mi razón de sonreír", "Ojos de mi vida", "Abrazarte es mi paz", "Besarte es tocar el cielo", "Mi hermosa casualidad",
-                    "Te amo hoy y siempre", "Eres mi bendición", "Mi compañera ideal", "Juntos contra el mundo", "Mi amor bonito",
-                    "Eres mi galaxia", "Tu sonrisa me eleva", "Mi latido favorito", "Te anhelo tanto", "Eres mi hogar",
-                    "Mi dulce paz", "Amor sin límites", "Mi mayor alegría", "Eres mi norte", "Contigo la vida brilla",
-                    "Mi princesa hermosa", "Te amo con el alma", "Eres mi paz mental", "Mi gran debilidad", "Sueño con tus besos",
-                    "Mi dulce compañía", "Eres mi poema", "Te amo sin condiciones", "Mi dulce refugio", "Eres mi gran anhelo",
-                    "Mi destino favorito", "Te amo eternamente", "Mi dulce estrella", "Eres mi paz y calma", "Mi dulce inspiración",
-                    "Te amo por siempre", "Mi gran bendición", "Eres mi sol", "Mi vida entera es tuya", "Feliz 1er aniversario"
-                ];
-                for (let i = 0; i < mensajes4.length; i++) {
-                    let angulo = (i * (360 / mensajes4.length));
-                    document.write(`<div class="planet" style="transform: rotate(${angulo}deg) translate(450px) rotate(-${angulo}deg);"><div class="floating-bubble">💫 ${mensajes4[i]}</div></div>`);
-                }
-            </script>
-        </div>
-
+    <div class="cuadro-amarillo">
+        Eres mi universo ✨
     </div>
+
+    <div class="universe-sun">
+        <div class="heart-shape"></div>
+        <div class="sun-text">Te amo Jhoselin ❤️</div>
+    </div>
+
+    <div class="instruction-bar">
+        🖱️ Haz clic y arrastra para rotar el universo en 3D
+    </div>
+
+    <div id="canvas-container"></div>
 
     <audio id="background-music" loop>
         <source src="cancion.mp3" type="audio/mp3">
-        Tu navegador no soporta audio.
     </audio>
 
     <script>
-        function iniciarExperiencia() {
-            var screenStart = document.getElementById('screen-start');
-            var mainContent = document.getElementById('main-content');
-            var music = document.getElementById('background-music');
+        let scene, camera, renderer, controls;
+        let orbits = [];
 
-            music.play().catch(error => {
-                console.log("Audio bloqueado:", error);
+        const listaMensajes = [
+            "Te amo infinito", "Mi dulce amor", "Eres mi paz", "Ojos bellos", "Mi princesa", 
+            "Por siempre juntos", "Contigo soy feliz", "Mi gran fortuna", "Te necesito hoy", "Amor verdadero", 
+            "Mi compañera", "Eres arte puro", "Sonrisa hermosa", "Mi gran tesoro", "Te pienso siempre", 
+            "Dueña de mi alma", "Mi destino eres tú", "Magia pura", "Abrazo eterno", "Besos infinitos", 
+            "Mi otra mitad", "Juntos la eternidad", "Te amo mi vida", "Primer aniversario", "Eres mi todo", 
+            "Mi gran amor", "Cada día más", "Sueño contigo", "Te adoro", "Mi dulce Jhoselin", 
+            "Luz en mi vida", "Corazón mío", "Eres única", "Mi refugio", "Para siempre", 
+            "Te amo sin fin", "Mi felicidad", "Nuestra historia", "Feliz aniversario", "Te amo muchísimo",
+            "Te amo con locura", "Mi cielo entero", "Eres tan perfecta", "Dueña de mis días", "Amor de mi vida",
+            "A tu lado todo es mejor", "Mi dulce tesoro", "Contigo hasta viejitos", "Te pienso a cada segundo", "Eres mi ilusión",
+            "Mi razón de sonreír", "Ojos de mi vida", "Abrazarte es mi paz", "Besarte es tocar el cielo", "Mi hermosa casualidad",
+            "Te amo hoy y siempre", "Eres mi bendición", "Mi compañera ideal", "Juntos contra el mundo", "Mi amor bonito",
+            "Eres mi galaxia", "Tu sonrisa me eleva", "Mi latido favorito", "Te anhelo tanto", "Eres mi hogar",
+            "Mi dulce paz", "Amor sin límites", "Mi mayor alegría", "Eres mi norte", "Contigo la vida brilla",
+            "Mi princesa hermosa", "Te amo con el alma", "Eres mi paz mental", "Mi gran debilidad", "Sueño con tus besos",
+            "Mi dulce compañía", "Eres mi poema", "Te amo sin condiciones", "Mi dulce refugio", "Eres mi gran anhelo",
+            "Mi destino favorito", "Te amo eternamente", "Mi dulce estrella", "Eres mi paz y calma", "Mi dulce inspiración",
+            "Te amo por siempre", "Mi gran bendición", "Eres mi sol", "Mi vida entera es tuya", "Feliz 1er aniversario"
+        ];
+
+        function crearTextoTexture(texto) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 256;
+            canvas.height = 64;
+            const ctx = canvas.getContext('2d');
+
+            ctx.fillStyle = 'rgba(20, 20, 20, 0.85)';
+            ctx.strokeStyle = '#ff5252';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.roundRect(10, 10, 236, 44, 15);
+            ctx.fill();
+            ctx.stroke();
+
+            ctx.fillStyle = '#ff8a80';
+            ctx.font = 'Bold 18px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(texto, 128, 32);
+
+            return new THREE.CanvasTexture(canvas);
+        }
+
+        function init3D() {
+            const container = document.getElementById('canvas-container');
+            scene = new THREE.Scene();
+
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
+            camera.position.set(0, 0, 450);
+
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            container.appendChild(renderer.domElement);
+
+            // Permite rotar libremente el universo 3D al hacer clic y arrastrar
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.rotateSpeed = 0.8;
+
+            // Fondo de estrellas
+            const starsGeometry = new THREE.BufferGeometry();
+            const starsCount = 1200;
+            const starPositions = new Float32Array(starsCount * 3);
+            for(let i=0; i<starsCount*3; i++) {
+                starPositions[i] = (Math.random() - 0.5) * 1500;
+            }
+            starsGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
+            const starsMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 1.5 });
+            const starField = new THREE.Points(starsGeometry, starsMaterial);
+            scene.add(starField);
+
+            // Cargar imágenes
+            const textureLoader = new THREE.TextureLoader();
+            const fotos = ['foto1.jpg', 'foto2.jpg', 'foto3.jpg', 'foto4.jpg'];
+
+            // Crear 4 Órbitas 3D con mensajes y fotos
+            const radiors = [120, 200, 280, 360];
+            const speeds = [0.015, -0.01, 0.007, -0.005];
+
+            radiors.forEach((radius, idx) => {
+                const orbitGroup = new THREE.Group();
+                scene.add(orbitGroup);
+
+                // Anillo visual de la órbita
+                const ringGeo = new THREE.RingGeometry(radius - 0.5, radius + 0.5, 64);
+                const ringMat = new THREE.MeshBasicMaterial({ color: 0xffffff, side: THREE.DoubleSide, transparent: true, opacity: 0.1 });
+                const ringMesh = new THREE.Mesh(ringGeo, ringMat);
+                ringMesh.rotation.x = Math.PI / 2;
+                orbitGroup.add(ringMesh);
+
+                // Agregar elementos a esta órbita
+                let itemsCount = idx === 1 ? 12 : (idx === 0 ? 8 : 35);
+                for(let i=0; i<itemsCount; i++) {
+                    const angle = (i / itemsCount) * Math.PI * 2;
+                    let mesh;
+
+                    // En la órbita 2 colocamos las 4 fotos
+                    if (idx === 1 && i % 3 === 0 && (i/3) < 4) {
+                        const fotoIndex = Math.floor(i / 3);
+                        const texture = textureLoader.load(fotos[fotoIndex]);
+                        const geo = new THREE.PlaneGeometry(35, 35);
+                        const mat = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
+                        mesh = new THREE.Mesh(geo, mat);
+                    } else {
+                        // En las demás colocar los mensajes
+                        const msg = listaMensajes[(idx * 20 + i) % listaMensajes.length];
+                        const textTex = crearTextoTexture(msg);
+                        const geo = new THREE.PlaneGeometry(40, 10);
+                        const mat = new THREE.MeshBasicMaterial({ map: textTex, transparent: true, side: THREE.DoubleSide });
+                        mesh = new THREE.Mesh(geo, mat);
+                    }
+
+                    mesh.position.set(Math.cos(angle) * radius, 0, Math.sin(angle) * radius);
+                    orbitGroup.add(mesh);
+                }
+
+                orbits.push({ group: orbitGroup, speed: speeds[idx] });
             });
 
+            window.addEventListener('resize', onWindowResize);
+            animate();
+        }
+
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            orbits.forEach(orbit => {
+                orbit.group.rotation.y += orbit.speed;
+                // Orientar cada sprite hacia la cámara para lectura perfecta
+                orbit.group.children.forEach(child => {
+                    if (child.type === "Mesh" && child.geometry.type !== "RingGeometry") {
+                        child.lookAt(camera.position);
+                    }
+                });
+            });
+
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        function iniciarExperiencia() {
+            const screenStart = document.getElementById('screen-start');
+            const music = document.getElementById('background-music');
+
+            music.play().catch(e => console.log("Audio bloqueado:", e));
+
             screenStart.style.opacity = '0';
-            setTimeout(function() {
+            setTimeout(() => {
                 screenStart.style.display = 'none';
-                mainContent.style.display = 'block';
+                init3D();
             }, 1000);
         }
     </script>
