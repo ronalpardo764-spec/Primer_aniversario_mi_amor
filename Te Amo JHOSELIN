@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Primer Aniversario - Te amo Joselyn</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0b0b0b;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            color: white;
+        }
+
+        /* Pantalla de inicio */
+        #screen-start {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0b0b0b;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            cursor: pointer;
+            transition: opacity 1s ease;
+        }
+
+        .btn-start {
+            background-color: #d32f2f;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            box-shadow: 0 0 15px rgba(211, 47, 47, 0.8);
+            animation: pulse 1.5s infinite;
+            text-align: center;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 10px rgba(211, 47, 47, 0.6); }
+            50% { transform: scale(1.05); box-shadow: 0 0 20px rgba(211, 47, 47, 1); }
+            100% { transform: scale(1); box-shadow: 0 0 10px rgba(211, 47, 47, 0.6); }
+        }
+
+        /* Contenido principal */
+        #main-content {
+            display: none;
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Cuadro amarillo para "Eres mi universo" */
+        .cuadro-amarillo {
+            position: absolute;
+            top: 8%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #ffeb3b;
+            color: #000;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            box-shadow: 0 0 15px rgba(255, 235, 59, 0.6);
+            z-index: 10;
+            text-align: center;
+        }
+
+        /* Contenedor de imágenes principales con mensajes más grandes */
+        .gallery-container {
+            position: absolute;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            z-index: 5;
+            max-width: 80%;
+        }
+
+        .memory-card {
+            background: rgba(20, 20, 20, 0.85);
+            border: 2px solid #d32f2f;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            width: 220px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        .memory-card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .memory-card p {
+            font-size: 1.1rem;
+            margin-top: 10px;
+            font-weight: bold;
+            color: #ff8a80;
+        }
+
+        /* Lluvia de corazones / texto flotante de fondo */
+        .floating-text {
+            position: absolute;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+            animation: float 10s linear infinite;
+            white-space: nowrap;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) scale(0.8); opacity: 0; }
+            20% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Pantalla de inicio con el texto solicitado -->
+    <div id="screen-start" onclick="iniciarExperiencia()">
+        <div class="btn-start">
+            Primer aniversario que celebramos, te amo Joselyn ❤️
+        </div>
+    </div>
+
+    <!-- Contenido principal -->
+    <div id="main-content" style="display: none;">
+        
+        <!-- Cuadro amarillo en la posición solicitada -->
+        <div class="cuadro-amarillo">
+            Eres mi universo ✨
+        </div>
+
+        <!-- 4 Imágenes con mensajes más grandes -->
+        <div class="gallery-container">
+            <div class="memory-card">
+                <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=400" alt="Foto 1">
+                <p>Nuestro primer gran momento juntos</p>
+            </div>
+            <div class="memory-card">
+                <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=400" alt="Foto 2">
+                <p>Cada sonrisa a tu lado es magia</p>
+            </div>
+            <div class="memory-card">
+                <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=400" alt="Foto 3">
+                <p>Contigo el tiempo se detiene</p>
+            </div>
+            <div class="memory-card">
+                <img src="https://images.unsplash.com/photo-1494774157365-9e04c6720e47?w=400" alt="Foto 4">
+                <p>Por una eternidad más a tu lado</p>
+            </div>
+        </div>
+
+        <!-- Elementos flotantes de fondo -->
+        <div class="floating-text" style="left: 10%; animation-duration: 12s;">Te amo muchísimo ❤️</div>
+        <div class="floating-text" style="left: 30%; animation-duration: 9s;">Mi lugar seguro eres tú</div>
+        <div class="floating-text" style="left: 70%; animation-duration: 14s;">Juntos por siempre</div>
+        <div class="floating-text" style="left: 85%; animation-duration: 11s;">Mi vida entera 💖</div>
+    </div>
+
+    <!-- Audio de fondo (puedes reemplazar la URL con tu archivo de música local o enlazado) -->
+    <audio id="background-music" loop>
+        <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mp3">
+        Tu navegador no soporta audio.
+    </audio>
+
+    <script>
+        function iniciarExperiencia() {
+            var screenStart = document.getElementById('screen-start');
+            var mainContent = document.getElementById('main-content');
+            var music = document.getElementById('background-music');
+
+            // Reproducir música
+            music.play().catch(error => {
+                console.log("Reproducción de audio bloqueada por el navegador:", error);
+            });
+
+            // Transición de pantallas
+            screenStart.style.opacity = '0';
+            setTimeout(function() {
+                screenStart.style.display = 'none';
+                mainContent.style.display = 'flex';
+            }, 1000);
+        }
+    </script>
+</body>
+</html>b
