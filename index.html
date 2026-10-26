@@ -3,762 +3,359 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Te Amo Jhoselin - Nuestro Universo 3D</title>
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Three.js Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-    <!-- FontAwesome para íconos -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+    <title>Primer Aniversario - Te amo Jhoselin</title>
     <style>
-        * {
+        body, html {
             margin: 0;
             padding: 0;
-            box-sizing: border-box;
-            user-select: none;
-        }
-
-        body, html {
             width: 100%;
             height: 100%;
+            background-color: #050505;
+            font-family: 'Arial', sans-serif;
             overflow: hidden;
-            background-color: #030308;
-            font-family: 'Poppins', sans-serif;
-            color: #ffffff;
+            color: white;
         }
 
-        /* Canvas de Three.js */
-        #webgl-container {
+        /* Pantalla de inicio */
+        #screen-start {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 1;
-        }
-
-        /* Overlay UI de la aplicación */
-        #ui-layer {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 10;
-            pointer-events: none;
+            background-color: #050505;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px;
-        }
-
-        /* Banner superior estilo "Eres mi universo ✨" */
-        .universe-badge {
-            pointer-events: auto;
-            background: linear-gradient(135deg, #ffeb3b, #fbc02d);
-            color: #000000;
-            font-weight: 700;
-            font-size: 1.2rem;
-            padding: 12px 28px;
-            border-radius: 50px;
-            box-shadow: 0 0 25px rgba(255, 235, 59, 0.8), inset 0 0 10px rgba(255, 255, 255, 0.8);
-            border: 2px solid #ffffff;
-            letter-spacing: 0.5px;
-            animation: floatBadge 3s ease-in-out infinite alternate;
-            margin-top: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        @keyframes floatBadge {
-            0% { transform: translateY(0px) scale(1); box-shadow: 0 0 20px rgba(255, 235, 59, 0.6); }
-            100% { transform: translateY(-8px) scale(1.03); box-shadow: 0 0 35px rgba(255, 235, 59, 1); }
-        }
-
-        /* Instrucción sutil abajo */
-        .instruction-hint {
-            pointer-events: auto;
-            background: rgba(10, 10, 25, 0.65);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            padding: 8px 18px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.8);
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        /* Controles de música */
-        .audio-control-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 20;
-            pointer-events: auto;
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            background: rgba(255, 40, 90, 0.8);
-            border: 2px solid #ffffff;
-            color: white;
-            display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 1.2rem;
-            cursor: pointer;
-            box-shadow: 0 0 15px rgba(255, 40, 90, 0.6);
-            transition: all 0.3s ease;
-        }
-
-        .audio-control-btn:hover {
-            transform: scale(1.1);
-            background: rgba(255, 40, 90, 1);
-        }
-
-        /* Pantalla de inicio de bienvenida */
-        #welcome-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at center, #1a0928 0%, #030308 100%);
             z-index: 100;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            text-align: center;
-            transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1), visibility 1.2s;
-        }
-
-        .welcome-title {
-            font-family: 'Dancing Script', cursive;
-            font-size: 3.5rem;
-            color: #ff4081;
-            text-shadow: 0 0 20px rgba(255, 64, 129, 0.8);
-            margin-bottom: 20px;
-        }
-
-        .welcome-sub {
-            font-size: 1.1rem;
-            color: #e0e0e0;
-            max-width: 500px;
-            margin-bottom: 40px;
-            line-height: 1.6;
-        }
-
-        .btn-start-universe {
-            pointer-events: auto;
-            background: linear-gradient(135deg, #ff1744, #d50000);
-            color: white;
-            padding: 18px 36px;
-            border-radius: 50px;
-            font-size: 1.25rem;
-            font-weight: 700;
-            border: 2px solid #ff80ab;
             cursor: pointer;
-            box-shadow: 0 0 30px rgba(255, 23, 68, 0.9), inset 0 0 15px rgba(255, 255, 255, 0.5);
-            animation: pulseBtn 1.8s infinite;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            transition: transform 0.2s;
+            transition: opacity 1s ease;
         }
 
-        .btn-start-universe:hover {
-            transform: scale(1.08);
+        .btn-start {
+            background-color: #d32f2f;
+            color: white;
+            padding: 15px 35px;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            box-shadow: 0 0 20px rgba(211, 47, 47, 0.9);
+            animation: pulse 1.5s infinite;
+            text-align: center;
         }
 
-        @keyframes pulseBtn {
-            0% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 23, 68, 0.8); }
-            50% { transform: scale(1.05); box-shadow: 0 0 40px rgba(255, 23, 68, 1), 0 0 10px #ffffff; }
-            100% { transform: scale(1); box-shadow: 0 0 20px rgba(255, 23, 68, 0.8); }
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 10px rgba(211, 47, 47, 0.6); }
+            50% { transform: scale(1.05); box-shadow: 0 0 25px rgba(211, 47, 47, 1); }
+            100% { transform: scale(1); box-shadow: 0 0 10px rgba(211, 47, 47, 0.6); }
         }
 
-        /* Estrellas decorativas en la pantalla de inicio */
-        .bg-star {
+        /* Contenedor principal del Universo */
+        #main-content {
+            display: none;
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, #150015 0%, #050505 100%);
+        }
+
+        /* Cuadro amarillo arriba: Eres mi universo */
+        .cuadro-amarillo {
             position: absolute;
-            background: white;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #ffeb3b;
+            color: #000;
+            padding: 10px 25px;
+            border-radius: 8px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            box-shadow: 0 0 20px rgba(255, 235, 59, 0.8);
+            z-index: 50;
+            text-align: center;
+        }
+
+        /* Corazón y mensaje central (El Sol del Universo) */
+        .universe-sun {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 40;
+            animation: heartbeat 2s infinite;
+        }
+
+        .heart-shape {
+            background-color: #ff1744;
+            display: inline-block;
+            height: 70px;
+            margin: 0 10px;
+            position: relative;
+            transform: rotate(-45deg);
+            width: 70px;
+            box-shadow: 0 0 30px rgba(255, 23, 68, 0.9);
+        }
+
+        .heart-shape:before,
+        .heart-shape:after {
+            content: "";
+            background-color: #ff1744;
             border-radius: 50%;
-            opacity: 0.6;
-            animation: twinkle var(--duration) infinite ease-in-out;
+            height: 70px;
+            position: absolute;
+            width: 70px;
         }
 
+        .heart-shape:before { top: -35px; left: 0; }
+        .heart-shape:after { left: 35px; top: 0; }
+
+        .sun-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 0 10px rgba(0,0,0,0.9);
+            white-space: nowrap;
+            z-index: 45;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 8px 15px;
+            border-radius: 20px;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            30% { transform: translate(-50%, -50%) scale(1.1); }
+            50% { transform: translate(-50%, -50%) scale(1); }
+            70% { transform: translate(-50%, -50%) scale(1.1); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+
+        /* Sistema Solar: Órbitas rotatorias */
+        .orbit-system {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            z-index: 20;
+        }
+
+        /* Órbita 1 (Mensajes) */
+        .orbit-1 {
+            width: 320px;
+            height: 320px;
+            margin: -160px 0 0 -160px;
+            animation: rotateOrbit 20s linear infinite;
+        }
+
+        /* Órbita 2 (Imágenes y más mensajes exteriores) */
+        .orbit-2 {
+            width: 580px;
+            height: 580px;
+            margin: -290px 0 0 -290px;
+            animation: rotateOrbit 35s linear infinite reverse;
+        }
+
+        .orbit-ring {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            border: 1px dashed rgba(255, 255, 255, 0.15);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .planet {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform-origin: center;
+        }
+
+        /* Elementos girando en Órbita 1 */
+        .p1 { transform: rotate(0deg) translate(160px) rotate(0deg); }
+        .p2 { transform: rotate(90deg) translate(160px) rotate(-90deg); }
+        .p3 { transform: rotate(180deg) translate(160px) rotate(-180deg); }
+        .p4 { transform: rotate(270deg) translate(160px) rotate(-270deg); }
+
+        /* Elementos girando en Órbita 2 */
+        .p5 { transform: rotate(30deg) translate(290px) rotate(-30deg); }
+        .p6 { transform: rotate(120deg) translate(290px) rotate(-120deg); }
+        .p7 { transform: rotate(210deg) translate(290px) rotate(-210deg); }
+        .p8 { transform: rotate(300deg) translate(290px) rotate(-300deg); }
+
+        @keyframes rotateOrbit {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Estilo de los textos flotantes en órbita */
+        .floating-bubble {
+            background: rgba(20, 20, 20, 0.85);
+            border: 1.5px solid #ff5252;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            color: #ff8a80;
+            white-space: nowrap;
+            box-shadow: 0 0 10px rgba(255, 82, 82, 0.4);
+            animation: counterRotate 20s linear infinite;
+        }
+
+        .orbit-2 .floating-bubble {
+            animation: counterRotateReverse 35s linear infinite;
+        }
+
+        @keyframes counterRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(-360deg); }
+        }
+        @keyframes counterRotateReverse {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Tarjetas de fotos en órbita con extensión .jpg */
+        .orbit-photo-card {
+            background: rgba(20, 20, 20, 0.9);
+            border: 2px solid #ff1744;
+            border-radius: 10px;
+            padding: 6px;
+            text-align: center;
+            width: 110px;
+            box-shadow: 0 0 15px rgba(255, 23, 68, 0.6);
+            animation: counterRotateReverse 35s linear infinite;
+        }
+
+        .orbit-photo-card img {
+            width: 100%;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+        .orbit-photo-card p {
+            font-size: 0.7rem;
+            margin: 4px 0 0 0;
+            color: #ff8a80;
+            font-weight: bold;
+        }
+
+        /* Estrellas de fondo estáticas */
+        .star {
+            position: absolute;
+            background-color: white;
+            border-radius: 50%;
+            animation: twinkle 2s infinite alternate;
+        }
         @keyframes twinkle {
-            0%, 100% { opacity: 0.2; transform: scale(0.8); }
-            50% { opacity: 1; transform: scale(1.3); }
-        }
-
-        @media (max-width: 600px) {
-            .universe-badge {
-                font-size: 1rem;
-                padding: 10px 20px;
-            }
-            .welcome-title {
-                font-size: 2.5rem;
-            }
-            .btn-start-universe {
-                font-size: 1rem;
-                padding: 14px 24px;
-            }
+            0% { opacity: 0.3; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1.2); }
         }
     </style>
 </head>
 <body>
 
-    <!-- Canvas WebGL de Three.js -->
-    <div id="webgl-container"></div>
-
-    <!-- UI Overlay principal -->
-    <div id="ui-layer">
-        <div class="universe-badge">
-            <span>Eres mi universo</span> ✨
-        </div>
-
-        <div class="instruction-hint">
-            <i class="fa-solid fa-hand-pointer"></i> Arrastra para girar el Universo 3D | Pasa sobre las fotos
-        </div>
-    </div>
-
-    <!-- Botón de control de Audio -->
-    <button class="audio-control-btn" id="audioToggle" title="Activar/Pausar música">
-        <i class="fa-solid fa-music"></i>
-    </button>
-
-    <!-- Pantalla de inicio de Bienvenida -->
-    <div id="welcome-screen">
-        <!-- Estrellas generadas por JS -->
-        <h1 class="welcome-title">Nuestro Aniversario</h1>
-        <p class="welcome-sub">He creado todo un universo de recuerdos, mensajes y amor que giran especialmente para ti...</p>
-        
-        <button class="btn-start-universe" onclick="iniciarUniverso()">
+    <!-- Pantalla de inicio -->
+    <div id="screen-start" onclick="iniciarExperiencia()">
+        <div class="btn-start">
             Primer aniversario que celebramos, te amo Jhoselin ❤️
-        </button>
+        </div>
     </div>
 
-    <!-- Etiqueta de audio de fondo -->
+    <!-- Contenido principal: El Universo -->
+    <div id="main-content">
+        
+        <!-- Fondo de estrellas -->
+        <div class="star" style="top: 10%; left: 20%; width: 2px; height: 2px;"></div>
+        <div class="star" style="top: 25% ; left: 80%; width: 3px; height: 3px; animation-delay: 1s;"></div>
+        <div class="star" style="top: 75%; left: 15%; width: 2px; height: 2px; animation-delay: 0.5s;"></div>
+        <div class="star" style="top: 85%; left: 85%; width: 3px; height: 3px; animation-delay: 1.5s;"></div>
+        <div class="star" style="top: 40%; left: 90%; width: 2px; height: 2px;"></div>
+        <div class="star" style="top: 60%; left: 10%; width: 2px; height: 2px; animation-delay: 0.8s;"></div>
+
+        <!-- Cuadro amarillo superior -->
+        <div class="cuadro-amarillo">
+            Eres mi universo ✨
+        </div>
+
+        <!-- Centro del Sistema (Corazón con Te amo Jhoselin) -->
+        <div class="universe-sun">
+            <div class="heart-shape"></div>
+            <div class="sun-text">Te amo Jhoselin ❤️</div>
+        </div>
+
+        <!-- Órbita 1: Mensajes girando cerca -->
+        <div class="orbit-system orbit-1">
+            <div class="orbit-ring"></div>
+            <div class="planet p1"><div class="floating-bubble">💖 Mi lugar seguro</div></div>
+            <div class="planet p2"><div class="floating-bubble">🌟 Magia a tu lado</div></div>
+            <div class="planet p3"><div class="floating-bubble">🌹 Juntos por siempre</div></div>
+            <div class="planet p4"><div class="floating-bubble">💫 Mi vida entera</div></div>
+        </div>
+
+        <!-- Órbita 2: Tus 4 Fotos (.jpg) y más mensajes girando alrededor -->
+        <div class="orbit-system orbit-2">
+            <div class="orbit-ring"></div>
+            <!-- Foto 1 -->
+            <div class="planet p5">
+                <div class="orbit-photo-card">
+                    <img src="foto1.jpg" alt="Foto 1">
+                    <p>Nuestro inicio</p>
+                </div>
+            </div>
+            <!-- Foto 2 -->
+            <div class="planet p6">
+                <div class="orbit-photo-card">
+                    <img src="foto2.jpg" alt="Foto 2">
+                    <p>Tus sonrisas</p>
+                </div>
+            </div>
+            <!-- Foto 3 -->
+            <div class="planet p7">
+                <div class="orbit-photo-card">
+                    <img src="foto3.jpg" alt="Foto 3">
+                    <p>Contigo todo</p>
+                </div>
+            </div>
+            <!-- Foto 4 -->
+            <div class="planet p8">
+                <div class="orbit-photo-card">
+                    <img src="foto4.jpg" alt="Foto 4">
+                    <p>Por una eternidad</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Audio de fondo -->
     <audio id="background-music" loop>
         <source src="cancion.mp3" type="audio/mp3">
-        Tu navegador no soporta el elemento de audio.
+        Tu navegador no soporta audio.
     </audio>
 
     <script>
-        // --- 1. CONFIGURACIÓN DE AUDIO & BIENVENIDA ---
-        const audio = document.getElementById('background-music');
-        const audioBtn = document.getElementById('audioToggle');
-        let isPlaying = false;
+        function iniciarExperiencia() {
+            var screenStart = document.getElementById('screen-start');
+            var mainContent = document.getElementById('main-content');
+            var music = document.getElementById('background-music');
 
-        function toggleAudio() {
-            if (isPlaying) {
-                audio.pause();
-                audioBtn.innerHTML = '<i class="fa-solid fa-volume-xmark"></i>';
-                audioBtn.style.background = 'rgba(100, 100, 100, 0.8)';
-            } else {
-                audio.play().then(() => {
-                    audioBtn.innerHTML = '<i class="fa-solid fa-music"></i>';
-                    audioBtn.style.background = 'rgba(255, 40, 90, 0.8)';
-                }).catch(e => console.log("Audio block:", e));
-            }
-            isPlaying = !isPlaying;
-        }
-
-        audioBtn.addEventListener('click', toggleAudio);
-
-        function iniciarUniverso() {
-            const welcome = document.getElementById('welcome-screen');
-            welcome.style.opacity = '0';
-            welcome.style.visibility = 'hidden';
-
-            // Intentar reproducir audio
-            audio.play().then(() => {
-                isPlaying = true;
-                audioBtn.innerHTML = '<i class="fa-solid fa-music"></i>';
-            }).catch(err => {
-                console.log("Auto-play bloqueado por el navegador:", err);
+            music.play().catch(error => {
+                console.log("Audio bloqueado:", error);
             });
 
-            // Iniciar animaciones intensas si es necesario
-            startUniverseAnimation();
+            screenStart.style.opacity = '0';
+            setTimeout(function() {
+                screenStart.style.display = 'none';
+                mainContent.style.display = 'block';
+            }, 1000);
         }
-
-        // Crear estrellas flotantes en la pantalla de inicio
-        const welcomeScreen = document.getElementById('welcome-screen');
-        for (let i = 0; i < 60; i++) {
-            const star = document.createElement('div');
-            star.className = 'bg-star';
-            star.style.width = Math.random() * 3 + 1 + 'px';
-            star.style.height = star.style.width;
-            star.style.top = Math.random() * 100 + '%';
-            star.style.left = Math.random() * 100 + '%';
-            star.style.setProperty('--duration', (Math.random() * 3 + 2) + 's');
-            welcomeScreen.appendChild(star);
-        }
-
-        // --- 2. TRES.JS - CONFIGURACIÓN DE LA ESCENA 3D ---
-        const container = document.getElementById('webgl-container');
-        const scene = new THREE.Scene();
-        scene.fog = new THREE.FogExp2(0x030308, 0.008);
-
-        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.set(0, 15, 35);
-
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        renderer.shadowMap.enabled = true;
-        container.appendChild(renderer.domElement);
-
-        // Control de cámara de órbita
-        const controls = new THREE.OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true;
-        controls.dampingFactor = 0.05;
-        controls.maxDistance = 65;
-        controls.minDistance = 15;
-        controls.maxPolarAngle = Math.PI / 1.8; // Para no ir demasiado abajo
-
-        // Luces
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
-        scene.add(ambientLight);
-
-        const pointLight = new THREE.PointLight(0xff2b66, 3, 50);
-        pointLight.position.set(0, 0, 0);
-        scene.add(pointLight);
-
-        const yellowLight = new THREE.PointLight(0xffeb3b, 1.5, 40);
-        yellowLight.position.set(0, 10, 0);
-        scene.add(yellowLight);
-
-        // --- 3. CREACIÓN DEL CAMPO DE ESTRELLAS Y POLVO CÓSMICO ---
-        function createStarfield() {
-            const starCount = 3500;
-            const geometry = new THREE.BufferGeometry();
-            const positions = new Float32Array(starCount * 3);
-            const colors = new Float32Array(starCount * 3);
-
-            const colorOptions = [
-                new THREE.Color(0xffffff),
-                new THREE.Color(0xff80ab),
-                new THREE.Color(0x80d8ff),
-                new THREE.Color(0xffff8d)
-            ];
-
-            for (let i = 0; i < starCount; i++) {
-                const radius = 50 + Math.random() * 100;
-                const theta = Math.random() * Math.PI * 2;
-                const phi = Math.acos((Math.random() * 2) - 1);
-
-                positions[i * 3] = radius * Math.sin(phi) * Math.cos(theta);
-                positions[i * 3 + 1] = radius * Math.sin(phi) * Math.sin(theta);
-                positions[i * 3 + 2] = radius * Math.cos(phi);
-
-                const color = colorOptions[Math.floor(Math.random() * colorOptions.length)];
-                colors[i * 3] = color.r;
-                colors[i * 3 + 1] = color.g;
-                colors[i * 3 + 2] = color.b;
-            }
-
-            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-
-            const material = new THREE.PointsMaterial({
-                size: 0.7,
-                vertexColors: true,
-                transparent: true,
-                opacity: 0.8
-            });
-
-            const starParticles = new THREE.Points(geometry, material);
-            scene.add(starParticles);
-            return starParticles;
-        }
-
-        const starField = createStarfield();
-
-        // --- 4. CORAZÓN CENTRAL 3D ("TE AMO JHOSELIN ❤️") ---
-        const heartGroup = new THREE.Group();
-        scene.add(heartGroup);
-
-        // Geometría de Corazón 3D
-        function createHeartMesh() {
-            const heartShape = new THREE.Shape();
-            const x = 0, y = 0;
-            heartShape.moveTo(x + 25, y + 25);
-            heartShape.bezierCurveTo(x + 25, y + 25, x + 20, y, x, y);
-            heartShape.bezierCurveTo(x - 30, y, x - 30, y + 35, x - 30, y + 35);
-            heartShape.bezierCurveTo(x - 30, y + 55, x - 10, y + 77, x + 25, y + 95);
-            heartShape.bezierCurveTo(x + 60, y + 77, x + 80, y + 55, x + 80, y + 35);
-            heartShape.bezierCurveTo(x + 80, y + 35, x + 80, y, x + 50, y);
-            heartShape.bezierCurveTo(x + 35, y, x + 25, y + 25, x + 25, y + 25);
-
-            const extrudeSettings = {
-                depth: 12,
-                bevelEnabled: true,
-                bevelSegments: 5,
-                steps: 2,
-                bevelSize: 4,
-                bevelThickness: 4
-            };
-
-            const geometry = new THREE.ExtrudeGeometry(heartShape, extrudeSettings);
-            geometry.center();
-
-            const material = new THREE.MeshPhongMaterial({
-                color: 0xff0044,
-                emissive: 0x990022,
-                specular: 0xffaaaa,
-                shininess: 100,
-                side: THREE.DoubleSide
-            });
-
-            const mesh = new THREE.Mesh(geometry, material);
-            mesh.scale.set(0.045, 0.045, 0.045);
-            mesh.rotation.z = Math.PI; // Orientar arriba
-            return mesh;
-        }
-
-        const heartMesh = createHeartMesh();
-        heartGroup.add(heartMesh);
-
-        // Crear Canvas Dinámico para la Etiqueta "Te amo Jhoselin ❤️" en 3D
-        function createTextTexture(text) {
-            const canvas = document.createElement('canvas');
-            canvas.width = 512;
-            canvas.height = 128;
-            const ctx = canvas.getContext('2d');
-
-            ctx.fillStyle = 'rgba(0, 0, 0, 0)';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            // Fondo pill brillante
-            ctx.fillStyle = '#ff1744';
-            ctx.shadowColor = '#ff80ab';
-            ctx.shadowBlur = 20;
-            
-            // Dibujar rectángulo redondeado
-            const x = 20, y = 20, w = 472, h = 88, r = 44;
-            ctx.beginPath();
-            ctx.moveTo(x + r, y);
-            ctx.arcTo(x + w, y, x + w, y + h, r);
-            ctx.arcTo(x + w, y + h, x, y + h, r);
-            ctx.arcTo(x, y + h, x, y, r);
-            ctx.arcTo(x, y, x + w, y, r);
-            ctx.closePath();
-            ctx.fill();
-
-            // Borde brillante
-            ctx.lineWidth = 6;
-            ctx.strokeStyle = '#ffffff';
-            ctx.stroke();
-
-            // Texto
-            ctx.fillStyle = '#ffffff';
-            ctx.font = 'bold 32px "Poppins", sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.shadowBlur = 0;
-            ctx.fillText(text, canvas.width / 2, canvas.height / 2);
-
-            return new THREE.CanvasTexture(canvas);
-        }
-
-        const textTexture = createTextTexture("Te amo Jhoselin ❤️");
-        const textMaterial = new THREE.SpriteMaterial({ map: textTexture, transparent: true });
-        const textSprite = new THREE.Sprite(textMaterial);
-        textSprite.scale.set(7, 1.75, 1);
-        textSprite.position.set(0, 3.2, 0);
-        heartGroup.add(textSprite);
-
-        // --- 5. CREACIÓN DE ÓRBITAS 3D Y MENSAJES GIRATORIOS ---
-        const orbitGroup = new THREE.Group();
-        scene.add(orbitGroup);
-
-        // Crear líneas de órbita concéntricas
-        function createOrbitRing(radius, color = 0xff2b66) {
-            const geometry = new THREE.BufferGeometry();
-            const points = [];
-            const segments = 128;
-            for (let i = 0; i <= segments; i++) {
-                const theta = (i / segments) * Math.PI * 2;
-                points.push(new THREE.Vector3(Math.cos(theta) * radius, 0, Math.sin(theta) * radius));
-            }
-            geometry.setFromPoints(points);
-            const material = new THREE.LineBasicMaterial({ color: color, transparent: true, opacity: 0.35 });
-            const ring = new THREE.Line(geometry, material);
-            orbitGroup.add(ring);
-        }
-
-        // Anillos de órbita visibles
-        [10, 15, 20, 25].forEach(r => createOrbitRing(r));
-
-        // Lista de mensajes románticos orbitantes
-        const messages = [
-            "✨ Eres mi universo",
-            "💖 Mi lugar seguro eres tú",
-            "🌟 Cada sonrisa tuya es magia",
-            "🌹 Juntos por siempre",
-            "💫 Mi vida entera",
-            "🥰 Te anhelo cada día",
-            "👑 Mi persona favorita",
-            "♾️ Por una eternidad a tu lado"
-        ];
-
-        // Crear Sprites para cada mensaje de texto en órbita
-        function createMessageSprite(text) {
-            const canvas = document.createElement('canvas');
-            canvas.width = 512;
-            canvas.height = 90;
-            const ctx = canvas.getContext('2d');
-
-            ctx.fillStyle = 'rgba(12, 12, 30, 0.85)';
-            const x = 10, y = 10, w = 492, h = 70, r = 20;
-            ctx.beginPath();
-            ctx.moveTo(x + r, y);
-            ctx.arcTo(x + w, y, x + w, y + h, r);
-            ctx.arcTo(x + w, y + h, x, y + h, r);
-            ctx.arcTo(x, y + h, x, y, r);
-            ctx.arcTo(x, y, x + w, y, r);
-            ctx.closePath();
-            ctx.fill();
-
-            ctx.lineWidth = 3;
-            ctx.strokeStyle = '#ff4081';
-            ctx.stroke();
-
-            ctx.fillStyle = '#ff8a80';
-            ctx.font = 'bold 24px "Poppins", sans-serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(text, canvas.width / 2, canvas.height / 2);
-
-            const texture = new THREE.CanvasTexture(canvas);
-            const spriteMaterial = new THREE.SpriteMaterial({ map: texture, transparent: true });
-            const sprite = new THREE.Sprite(spriteMaterial);
-            sprite.scale.set(5.5, 1, 1);
-            return sprite;
-        }
-
-        const orbitingItems = [];
-
-        // Distribuir mensajes en órbitas
-        messages.forEach((msg, idx) => {
-            const radius = 10 + (idx % 3) * 5;
-            const angle = (idx / messages.length) * Math.PI * 2;
-            const sprite = createMessageSprite(msg);
-            
-            const itemObj = {
-                mesh: sprite,
-                radius: radius,
-                angle: angle,
-                speed: 0.15 + (idx % 2) * 0.08,
-                verticalOffset: Math.sin(idx) * 1.5
-            };
-            orbitGroup.add(sprite);
-            orbitingItems.push(itemObj);
-        });
-
-        // --- 6. TARJETAS DE FOTOS 3D EN ÓRBITA ("foto1.jpeg", "foto2.jpeg", etc.) ---
-        const photoData = [
-            { src: 'foto1.jpeg', text: 'Nuestro primer gran momento juntos', radius: 16, angle: 0 },
-            { src: 'foto2.jpeg', text: 'Cada sonrisa a tu lado es magia', radius: 21, angle: Math.PI / 2 },
-            { src: 'foto3.jpeg', text: 'Contigo el tiempo se detiene', radius: 16, angle: Math.PI },
-            { src: 'foto4.jpeg', text: 'Por una eternidad más a tu lado', radius: 21, angle: Math.PI * 1.5 }
-        ];
-
-        const textureLoader = new THREE.TextureLoader();
-        const interactivePhotos = [];
-
-        photoData.forEach((data, i) => {
-            const photoGroup = new THREE.Group();
-
-            // Cargar imagen de usuario con fallback si falla
-            const photoTexture = textureLoader.load(
-                data.src,
-                undefined, // onLoad
-                undefined, // onProgress
-                function (err) { // onError fallback
-                    console.log(`No se pudo cargar ${data.src}, usando marcador de posición.`);
-                }
-            );
-
-            // Marco posterior estilo Tarjeta Neón
-            const frameGeo = new THREE.PlaneGeometry(4.2, 5.2);
-            const frameMat = new THREE.MeshPhongMaterial({
-                color: 0x15081a,
-                emissive: 0xd32f2f,
-                emissiveIntensity: 0.4,
-                side: THREE.DoubleSide
-            });
-            const frameMesh = new THREE.Mesh(frameGeo, frameMat);
-            photoGroup.add(frameMesh);
-
-            // Plano de la foto frontal
-            const photoGeo = new THREE.PlaneGeometry(3.8, 3.8);
-            const photoMat = new THREE.MeshBasicMaterial({
-                map: photoTexture,
-                side: THREE.DoubleSide
-            });
-            const photoMesh = new THREE.Mesh(photoGeo, photoMat);
-            photoMesh.position.set(0, 0.4, 0.02);
-            photoGroup.add(photoMesh);
-
-            // Borde brillante
-            const borderGeo = new THREE.RingGeometry(2.1, 2.15, 4);
-            const borderMat = new THREE.MeshBasicMaterial({ color: 0xff5252, side: THREE.DoubleSide });
-            const borderMesh = new THREE.Mesh(borderGeo, borderMat);
-            borderMesh.rotation.z = Math.PI / 4;
-            borderMesh.position.z = 0.03;
-            photoGroup.add(borderMesh);
-
-            // Texto descriptivo abajo de la foto
-            const captionCanvas = document.createElement('canvas');
-            captionCanvas.width = 380;
-            captionCanvas.height = 80;
-            const cCtx = captionCanvas.getContext('2d');
-            cCtx.fillStyle = '#ffffff';
-            cCtx.font = 'bold 20px "Poppins", sans-serif';
-            cCtx.textAlign = 'center';
-            cCtx.fillText(data.text, 190, 45);
-
-            const captionTex = new THREE.CanvasTexture(captionCanvas);
-            const captionMat = new THREE.SpriteMaterial({ map: captionTex, transparent: true });
-            const captionSprite = new THREE.Sprite(captionMat);
-            captionSprite.scale.set(3.8, 0.8, 1);
-            captionSprite.position.set(0, -1.9, 0.1);
-            photoGroup.add(captionSprite);
-
-            orbitGroup.add(photoGroup);
-
-            const photoObj = {
-                group: photoGroup,
-                radius: data.radius,
-                angle: data.angle,
-                speed: 0.1,
-                originalScale: 1,
-                isHovered: false
-            };
-
-            interactivePhotos.push(photoObj);
-        });
-
-        // --- 7. INTERACCIÓN CON RAYCASTER (HOVER EN FOTOS) ---
-        const raycaster = new THREE.Raycaster();
-        const mouse = new THREE.Vector2();
-
-        window.addEventListener('mousemove', (event) => {
-            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-            raycaster.setFromCamera(mouse, camera);
-            
-            // Obtener objetos interactivos
-            const meshesToTest = [];
-            interactivePhotos.forEach(p => {
-                p.group.traverse(child => {
-                    if (child.isMesh) meshesToTest.push(child);
-                });
-            });
-
-            const intersects = raycaster.intersectObjects(meshesToTest);
-
-            interactivePhotos.forEach(p => p.isHovered = false);
-
-            if (intersects.length > 0) {
-                const hitMesh = intersects[0].object;
-                // Encontrar a qué foto pertenece
-                interactivePhotos.forEach(p => {
-                    p.group.traverse(child => {
-                        if (child === hitMesh) {
-                            p.isHovered = true;
-                            document.body.style.cursor = 'pointer';
-                        }
-                    });
-                });
-            } else {
-                document.body.style.cursor = 'default';
-            }
-        });
-
-        // --- 8. BUCLE DE ANIMACIÓN PRINCIPAL ---
-        const clock = new THREE.Clock();
-
-        function animate() {
-            requestAnimationFrame(animate);
-
-            const delta = clock.getDelta();
-            const time = clock.getElapsedTime();
-
-            // Animación Latiendo del Corazón Central
-            const beat = 1 + Math.sin(time * 3) * 0.08;
-            heartMesh.scale.set(0.045 * beat, 0.045 * beat, 0.045 * beat);
-            heartMesh.rotation.y = Math.sin(time * 0.5) * 0.2;
-
-            // Rotación suave del campo de estrellas
-            if (starField) {
-                starField.rotation.y = time * 0.02;
-            }
-
-            // Animación de Mensajes Orbitantes
-            orbitingItems.forEach(item => {
-                item.angle += item.speed * delta;
-                item.mesh.position.x = Math.cos(item.angle) * item.radius;
-                item.mesh.position.z = Math.sin(item.angle) * item.radius;
-                item.mesh.position.y = item.verticalOffset + Math.sin(time * 2 + item.angle) * 0.5;
-            });
-
-            // Animación de Fotografías Orbitantes
-            interactivePhotos.forEach(p => {
-                // Si no está en Hover, sigue orbitando
-                if (!p.isHovered) {
-                    p.angle += p.speed * delta;
-                    p.group.position.x = Math.cos(p.angle) * p.radius;
-                    p.group.position.z = Math.sin(p.angle) * p.radius;
-                    p.group.position.y = Math.sin(time * 1.5 + p.angle) * 0.8;
-                    
-                    // Hacer que la tarjeta siempre mire hacia la cámara
-                    p.group.lookAt(camera.position);
-
-                    // Transición suave de tamaño normal
-                    p.group.scale.lerp(new THREE.Vector3(1, 1, 1), 0.1);
-                } else {
-                    // Zoom al hacer Hover
-                    p.group.lookAt(camera.position);
-                    p.group.scale.lerp(new THREE.Vector3(1.4, 1.4, 1.4), 0.1);
-                }
-            });
-
-            // Actualizar controles de cámara
-            controls.update();
-
-            renderer.render(scene, camera);
-        }
-
-        function startUniverseAnimation() {
-            clock.start();
-            animate();
-        }
-
-        // Ejecutar primer renderizado estático
-        renderer.render(scene, camera);
-        animate();
-
-        // Ajuste de pantalla responsive
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
     </script>
 </body>
 </html>
