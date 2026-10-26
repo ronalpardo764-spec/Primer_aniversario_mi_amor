@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Primer Aniversario - Te amo Joselyn</title>
+    <title>Primer Aniversario - Te amo Jhoselin</title>
     <style>
         body, html {
             margin: 0;
@@ -134,17 +134,17 @@
 </head>
 <body>
 
-    <!-- Pantalla de inicio con el texto solicitado -->
+    <!-- Pantalla de inicio con el nombre corregido -->
     <div id="screen-start" onclick="iniciarExperiencia()">
         <div class="btn-start">
-            Primer aniversario que celebramos, te amo Joselyn ❤️
+            Primer aniversario que celebramos, te amo Jhoselin ❤️
         </div>
     </div>
 
     <!-- Contenido principal -->
     <div id="main-content" style="display: none;">
         
-        <!-- Cuadro amarillo en la posición solicitada -->
+        <!-- Cuadro amarillo en la posición superior -->
         <div class="cuadro-amarillo">
             Eres mi universo ✨
         </div>
@@ -152,19 +152,19 @@
         <!-- 4 Imágenes con mensajes más grandes -->
         <div class="gallery-container">
             <div class="memory-card">
-                <img src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=400" alt="Foto 1">
+                <img src="foto1.jpg" alt="Foto 1">
                 <p>Nuestro primer gran momento juntos</p>
             </div>
             <div class="memory-card">
-                <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=400" alt="Foto 2">
+                <img src="foto2.jpg" alt="Foto 2">
                 <p>Cada sonrisa a tu lado es magia</p>
             </div>
             <div class="memory-card">
-                <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=400" alt="Foto 3">
+                <img src="foto3.jpg" alt="Foto 3">
                 <p>Contigo el tiempo se detiene</p>
             </div>
             <div class="memory-card">
-                <img src="https://images.unsplash.com/photo-1494774157365-9e04c6720e47?w=400" alt="Foto 4">
+                <img src="foto4.jpg" alt="Foto 4">
                 <p>Por una eternidad más a tu lado</p>
             </div>
         </div>
@@ -176,9 +176,9 @@
         <div class="floating-text" style="left: 85%; animation-duration: 11s;">Mi vida entera 💖</div>
     </div>
 
-    <!-- Audio de fondo (puedes reemplazar la URL con tu archivo de música local o enlazado) -->
+    <!-- Audio de fondo -->
     <audio id="background-music" loop>
-        <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mp3">
+        <source src="cancion.mp3" type="audio/mp3">
         Tu navegador no soporta audio.
     </audio>
 
@@ -188,7 +188,7 @@
             var mainContent = document.getElementById('main-content');
             var music = document.getElementById('background-music');
 
-            // Reproducir música
+            // Reproducir música al hacer clic
             music.play().catch(error => {
                 console.log("Reproducción de audio bloqueada por el navegador:", error);
             });
@@ -202,4 +202,4 @@
         }
     </script>
 </body>
-</html>b
+</html>
