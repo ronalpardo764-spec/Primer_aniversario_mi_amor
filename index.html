@@ -87,12 +87,12 @@
         .heart-shape {
             background-color: #ff1744;
             display: inline-block;
-            height: 75px;
+            height: 70px;
             margin: 0 10px;
             position: relative;
             transform: rotate(-45deg);
-            width: 75px;
-            box-shadow: 0 0 35px rgba(255, 23, 68, 0.9);
+            width: 70px;
+            box-shadow: 0 0 30px rgba(255, 23, 68, 0.9);
         }
 
         .heart-shape:before,
@@ -100,26 +100,26 @@
             content: "";
             background-color: #ff1744;
             border-radius: 50%;
-            height: 75px;
+            height: 70px;
             position: absolute;
-            width: 75px;
+            width: 70px;
         }
 
-        .heart-shape:before { top: -38px; left: 0; }
-        .heart-shape:after { left: 38px; top: 0; }
+        .heart-shape:before { top: -35px; left: 0; }
+        .heart-shape:after { left: 35px; top: 0; }
 
         .sun-text {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: bold;
             color: white;
             text-shadow: 0 0 10px rgba(0,0,0,0.9);
             white-space: nowrap;
             z-index: 45;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(0, 0, 0, 0.6);
             padding: 8px 15px;
             border-radius: 20px;
         }
@@ -132,7 +132,6 @@
             100% { transform: translate(-50%, -50%) scale(1); }
         }
 
-        /* Sistema de Órbitas Galácticas */
         .orbit-system {
             position: absolute;
             top: 50%;
@@ -151,16 +150,16 @@
             pointer-events: none;
         }
 
-        /* Tamaños de las múltiples órbitas */
-        .orbit-1 { width: 300px; height: 300px; margin: -150px 0 0 -150px; animation: rotateOrbit 25s linear infinite; }
-        .orbit-2 { width: 500px; height: 500px; margin: -250px 0 0 -250px; animation: rotateOrbit 40s linear infinite reverse; }
-        .orbit-3 { width: 720px; height: 720px; margin: -360px 0 0 -360px; animation: rotateOrbit 55s linear infinite; }
-        .orbit-4 { width: 940px; height: 940px; margin: -470px 0 0 -470px; animation: rotateOrbit 70s linear infinite reverse; }
+        /* Órbitas expansivas */
+        .orbit-1 { width: 300px; height: 300px; margin: -150px 0 0 -150px; animation: rotateOrbit 30s linear infinite; }
+        .orbit-2 { width: 500px; height: 500px; margin: -250px 0 0 -250px; animation: rotateOrbit 45s linear infinite reverse; }
+        .orbit-3 { width: 700px; height: 700px; margin: -350px 0 0 -350px; animation: rotateOrbit 60s linear infinite; }
+        .orbit-4 { width: 900px; height: 900px; margin: -450px 0 0 -450px; animation: rotateOrbit 75s linear infinite reverse; }
 
         .orbit-1 .orbit-ring { width: 300px; height: 300px; }
         .orbit-2 .orbit-ring { width: 500px; height: 500px; }
-        .orbit-3 .orbit-ring { width: 720px; height: 720px; }
-        .orbit-4 .orbit-ring { width: 940px; height: 940px; }
+        .orbit-3 .orbit-ring { width: 700px; height: 700px; }
+        .orbit-4 .orbit-ring { width: 900px; height: 900px; }
 
         @keyframes rotateOrbit {
             from { transform: rotate(0deg); }
@@ -174,55 +173,50 @@
             transform-origin: center;
         }
 
-        /* Burbujas de mensajes */
         .floating-bubble {
             background: rgba(15, 15, 15, 0.9);
             border: 1px solid rgba(255, 82, 82, 0.6);
-            padding: 5px 10px;
-            border-radius: 10px;
-            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 0.7rem;
             color: #ff8a80;
             white-space: nowrap;
-            box-shadow: 0 0 8px rgba(255, 82, 82, 0.3);
+            box-shadow: 0 0 6px rgba(255, 82, 82, 0.3);
         }
 
-        /* Contrarrotación para que el texto siempre se lea derecho */
-        .orbit-1 .floating-bubble { animation: counterRotate 25s linear infinite; }
-        .orbit-2 .floating-bubble { animation: counterRotateReverse 40s linear infinite; }
-        .orbit-3 .floating-bubble { animation: counterRotate 55s linear infinite; }
-        .orbit-4 .floating-bubble { animation: counterRotateReverse 70s linear infinite; }
+        .orbit-1 .floating-bubble { animation: counterRotate 30s linear infinite; }
+        .orbit-2 .floating-bubble { animation: counterRotateReverse 45s linear infinite; }
+        .orbit-3 .floating-bubble { animation: counterRotate 60s linear infinite; }
+        .orbit-4 .floating-bubble { animation: counterRotateReverse 75s linear infinite; }
 
         @keyframes counterRotate { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
         @keyframes counterRotateReverse { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
-        /* Tarjetas de fotos integradas en la órbita */
         .orbit-photo-card {
             background: rgba(20, 20, 20, 0.95);
             border: 2px solid #ff1744;
             border-radius: 10px;
             padding: 5px;
             text-align: center;
-            width: 110px;
-            box-shadow: 0 0 15px rgba(255, 23, 68, 0.7);
+            width: 95px;
+            box-shadow: 0 0 12px rgba(255, 23, 68, 0.7);
+            animation: counterRotateReverse 45s linear infinite;
         }
-        .orbit-2 .orbit-photo-card { animation: counterRotateReverse 40s linear infinite; }
-        .orbit-3 .orbit-photo-card { animation: counterRotate 55s linear infinite; }
 
         .orbit-photo-card img {
             width: 100%;
-            height: 80px;
+            height: 70px;
             object-fit: cover;
             border-radius: 6px;
         }
 
         .orbit-photo-card p {
-            font-size: 0.65rem;
+            font-size: 0.55rem;
             margin: 3px 0 0 0;
             color: #ff8a80;
             font-weight: bold;
         }
 
-        /* Fondo de estrellas */
         .star {
             position: absolute;
             background-color: white;
@@ -245,15 +239,12 @@
 
     <div id="main-content">
         
-        <!-- Estrellas de fondo -->
         <div class="star" style="top: 10%; left: 15%; width: 2px; height: 2px;"></div>
         <div class="star" style="top: 25%; left: 85%; width: 3px; height: 3px; animation-delay: 1s;"></div>
         <div class="star" style="top: 80%; left: 10%; width: 2px; height: 2px; animation-delay: 0.5s;"></div>
         <div class="star" style="top: 90%; left: 80%; width: 3px; height: 3px; animation-delay: 1.5s;"></div>
         <div class="star" style="top: 40%; left: 95%; width: 2px; height: 2px;"></div>
         <div class="star" style="top: 60%; left: 5%; width: 2px; height: 2px; animation-delay: 0.8s;"></div>
-        <div class="star" style="top: 15%; left: 50%; width: 3px; height: 3px; animation-delay: 1.2s;"></div>
-        <div class="star" style="top: 85%; left: 45%; width: 2px; height: 2px; animation-delay: 0.3s;"></div>
 
         <div class="cuadro-amarillo">
             Eres mi universo ✨
@@ -267,103 +258,82 @@
         <!-- ÓRBITA 1 (Cercana) -->
         <div class="orbit-system orbit-1">
             <div class="orbit-ring"></div>
-            <div class="planet" style="transform: rotate(0deg) translate(150px) rotate(0deg);"><div class="floating-bubble">💖 Mi lugar seguro</div></div>
-            <div class="planet" style="transform: rotate(45deg) translate(150px) rotate(-45deg);"><div class="floating-bubble">🌟 Eres magia</div></div>
-            <div class="planet" style="transform: rotate(90deg) translate(150px) rotate(-90deg);"><div class="floating-bubble">🌹 Te amo tanto</div></div>
-            <div class="planet" style="transform: rotate(135deg) translate(150px) rotate(-135deg);"><div class="floating-bubble">💫 Mi vida entera</div></div>
-            <div class="planet" style="transform: rotate(180deg) translate(150px) rotate(-180deg);"><div class="floating-bubble">✨ Ojos hermosos</div></div>
-            <div class="planet" style="transform: rotate(225deg) translate(150px) rotate(-225deg);"><div class="floating-bubble">❤️ Contigo siempre</div></div>
-            <div class="planet" style="transform: rotate(270deg) translate(150px) rotate(-270deg);"><div class="floating-bubble">🔥 Mi mundo</div></div>
-            <div class="planet" style="transform: rotate(315deg) translate(150px) rotate(-315deg);"><div class="floating-bubble">😍 Dueña de mí</div></div>
-        </div>
-
-        <!-- ÓRBITA 2 (Media con Fotos y Mensajes) -->
-        <div class="orbit-system orbit-2">
-            <div class="orbit-ring"></div>
-            <!-- FOTO 1 -->
-            <div class="planet" style="transform: rotate(0deg) translate(250px) rotate(0deg);">
-                <div class="orbit-photo-card"><img src="foto1.jpg" alt="Foto 1"><p>Nuestro inicio</p></div>
-            </div>
-            <div class="planet" style="transform: rotate(30deg) translate(250px) rotate(-30deg);"><div class="floating-bubble">🥰 Mi razón de ser</div></div>
-            <div class="planet" style="transform: rotate(60deg) translate(250px) rotate(-60deg);"><div class="floating-bubble">💖 Cada latido es tuyo</div></div>
-            <!-- FOTO 2 -->
-            <div class="planet" style="transform: rotate(90deg) translate(250px) rotate(-90deg);">
-                <div class="orbit-photo-card"><img src="foto2.jpg" alt="Foto 2"><p>Tus sonrisas</p></div>
-            </div>
-            <div class="planet" style="transform: rotate(120deg) translate(250px) rotate(-120deg);"><div class="floating-bubble">✨ Amor eterno</div></div>
-            <div class="planet" style="transform: rotate(150deg) translate(250px) rotate(-150deg);"><div class="floating-bubble">🌟 Eres única</div></div>
-            <!-- FOTO 3 -->
-            <div class="planet" style="transform: rotate(180deg) translate(250px) rotate(-180deg);">
-                <div class="orbit-photo-card"><img src="foto3.jpg" alt="Foto 3"><p>Contigo todo</p></div>
-            </div>
-            <div class="planet" style="transform: rotate(210deg) translate(250px) rotate(-210deg);"><div class="floating-bubble">💫 Pura felicidad</div></div>
-            <div class="planet" style="transform: rotate(240deg) translate(250px) rotate(-240deg);"><div class="floating-bubble">💖 Te adoro mi vida</div></div>
-            <!-- FOTO 4 -->
-            <div class="planet" style="transform: rotate(270deg) translate(270px) rotate(-270deg);">
-                <div class="orbit-photo-card"><img src="foto4.jpg" alt="Foto 4"><p>Por siempre</p></div>
-            </div>
-            <div class="planet" style="transform: rotate(300deg) translate(250px) rotate(-300deg);"><div class="floating-bubble">🌹 Mi sol y luna</div></div>
-            <div class="planet" style="transform: rotate(330deg) translate(250px) rotate(-330deg);"><div class="floating-bubble">✨ Te amo Jhoselin</div></div>
-        </div>
-
-        <!-- ÓRBITA 3 (Amplia con docenas de mensajes románticos) -->
-        <div class="orbit-system orbit-3">
-            <div class="orbit-ring"></div>
-            <!-- Generación masiva en órbita 3 (más de 40 mensajes distribuidos) -->
             <script>
-                document.write(
-                    '<div class="planet" style="transform: rotate(10deg) translate(360deg) rotate(-10deg);"><div class="floating-bubble">Te amo infinito</div></div>' +
-                    '<div class="planet" style="transform: rotate(25deg) translate(360deg) rotate(-25deg);"><div class="floating-bubble">Mi dulce amor</div></div>' +
-                    '<div class="planet" style="transform: rotate(40deg) translate(360deg) rotate(-40deg);"><div class="floating-bubble">Eres mi paz</div></div>' +
-                    '<div class="planet" style="transform: rotate(55deg) translate(360deg) rotate(-55deg);"><div class="floating-bubble">Ojos bellos</div></div>' +
-                    '<div class="planet" style="transform: rotate(70deg) translate(360deg) rotate(-70deg);"><div class="floating-bubble">Mi princesa</div></div>' +
-                    '<div class="planet" style="transform: rotate(85deg) translate(360deg) rotate(-85deg);"><div class="floating-bubble">Por siempre juntos</div></div>' +
-                    '<div class="planet" style="transform: rotate(100deg) translate(360deg) rotate(-100deg);"><div class="floating-bubble">Contigo soy feliz</div></div>' +
-                    '<div class="planet" style="transform: rotate(115deg) translate(360deg) rotate(-115deg);"><div class="floating-bubble">Mi gran fortuna</div></div>' +
-                    '<div class="planet" style="transform: rotate(130deg) translate(360deg) rotate(-130deg);"><div class="floating-bubble">Te necesito hoy</div></div>' +
-                    '<div class="planet" style="transform: rotate(145deg) translate(360deg) rotate(-145deg);"><div class="floating-bubble">Amor verdadero</div></div>' +
-                    '<div class="planet" style="transform: rotate(160deg) translate(360deg) rotate(-160deg);"><div class="floating-bubble">Mi compañera</div></div>' +
-                    '<div class="planet" style="transform: rotate(175deg) translate(360deg) rotate(-175deg);"><div class="floating-bubble">Eres arte puro</div></div>' +
-                    '<div class="planet" style="transform: rotate(190deg) translate(360deg) rotate(-190deg);"><div class="floating-bubble">Sonrisa hermosa</div></div>' +
-                    '<div class="planet" style="transform: rotate(205deg) translate(360deg) rotate(-205deg);"><div class="floating-bubble">Mi gran tesoro</div></div>' +
-                    '<div class="planet" style="transform: rotate(220deg) translate(360deg) rotate(-220deg);"><div class="floating-bubble">Te pienso siempre</div></div>' +
-                    '<div class="planet" style="transform: rotate(235deg) translate(360deg) rotate(-235deg);"><div class="floating-bubble">Dueña de mi alma</div></div>' +
-                    '<div class="planet" style="transform: rotate(250deg) translate(360deg) rotate(-250deg);"><div class="floating-bubble">Mi destino eres tú</div></div>' +
-                    '<div class="planet" style="transform: rotate(265deg) translate(360deg) rotate(-265deg);"><div class="floating-bubble">Magia pura</div></div>' +
-                    '<div class="planet" style="transform: rotate(280deg) translate(360deg) rotate(-280deg);"><div class="floating-bubble">Abrazo eterno</div></div>' +
-                    '<div class="planet" style="transform: rotate(295deg) translate(360deg) rotate(-295deg);"><div class="floating-bubble">Besos infinitos</div></div>' +
-                    '<div class="planet" style="transform: rotate(310deg) translate(360deg) rotate(-310deg);"><div class="floating-bubble">Mi otra mitad</div></div>' +
-                    '<div class="planet" style="transform: rotate(325deg) translate(360deg) rotate(-325deg);"><div class="floating-bubble">Juntos la eternidad</div></div>' +
-                    '<div class="planet" style="transform: rotate(340deg) translate(360deg) rotate(-340deg);"><div class="floating-bubble">Te amo mi vida</div></div>' +
-                    '<div class="planet" style="transform: rotate(355deg) translate(360deg) rotate(-355deg);"><div class="floating-bubble">Primer aniversario</div></div>'
-                );
+                const o1 = ["Mi lugar seguro", "Eres magia", "Te amo tanto", "Mi vida entera", "Ojos hermosos", "Contigo siempre", "Mi mundo", "Dueña de mí"];
+                for(let i=0; i<o1.length; i++){
+                    let ang = i * (360 / o1.length);
+                    document.write(`<div class="planet" style="transform: rotate(${ang}deg) translate(150px) rotate(-${ang}deg);"><div class="floating-bubble">💖 ${o1[i]}</div></div>`);
+                }
             </script>
         </div>
 
-        <!-- ÓRBITA 4 (Externa con lluvia masiva de mensajes) -->
+        <!-- ÓRBITA 2 (Fotos + Mensajes) -->
+        <div class="orbit-system orbit-2">
+            <div class="orbit-ring"></div>
+            <!-- Fotos distribuidas -->
+            <div class="planet" style="transform: rotate(0deg) translate(250px) rotate(0deg);">
+                <div class="orbit-photo-card"><img src="foto1.jpg" alt="1"><p>Nuestro inicio</p></div>
+            </div>
+            <div class="planet" style="transform: rotate(90deg) translate(250px) rotate(-90deg);">
+                <div class="orbit-photo-card"><img src="foto2.jpg" alt="2"><p>Tus sonrisas</p></div>
+            </div>
+            <div class="planet" style="transform: rotate(180deg) translate(250px) rotate(-180deg);">
+                <div class="orbit-photo-card"><img src="foto3.jpg" alt="3"><p>Contigo todo</p></div>
+            </div>
+            <div class="planet" style="transform: rotate(270deg) translate(250px) rotate(-270deg);">
+                <div class="orbit-photo-card"><img src="foto4.jpg" alt="4"><p>Por siempre</p></div>
+            </div>
+            <!-- Mensajes intercalados en órbita 2 -->
+            <script>
+                const o2 = ["Mi razón de ser", "Latido mío", "Amor eterno", "Eres única", "Pura felicidad", "Te adoro", "Mi sol y luna", "Te amo Jhoselin"];
+                for(let i=0; i<o2.length; i++){
+                    let ang = (i * (360 / o2.length)) + 45;
+                    document.write(`<div class="planet" style="transform: rotate(${ang}deg) translate(250px) rotate(-${ang}deg);"><div class="floating-bubble">✨ ${o2[i]}</div></div>`);
+                }
+            </script>
+        </div>
+
+        <!-- ÓRBITA 3 (Amplia con 40 mensajes) -->
+        <div class="orbit-system orbit-3">
+            <div class="orbit-ring"></div>
+            <script>
+                const mensajes3 = [
+                    "Te amo infinito", "Mi dulce amor", "Eres mi paz", "Ojos bellos", "Mi princesa", 
+                    "Por siempre juntos", "Contigo soy feliz", "Mi gran fortuna", "Te necesito hoy", "Amor verdadero", 
+                    "Mi compañera", "Eres arte puro", "Sonrisa hermosa", "Mi gran tesoro", "Te pienso siempre", 
+                    "Dueña de mi alma", "Mi destino eres tú", "Magia pura", "Abrazo eterno", "Besos infinitos", 
+                    "Mi otra mitad", "Juntos la eternidad", "Te amo mi vida", "Primer aniversario", "Eres mi todo", 
+                    "Mi gran amor", "Cada día más", "Sueño contigo", "Te adoro", "Mi dulce Jhoselin", 
+                    "Luz en mi vida", "Corazón mío", "Eres única", "Mi refugio", "Para siempre", 
+                    "Te amo sin fin", "Mi felicidad", "Nuestra historia", "Feliz aniversario", "Te amo muchísimo"
+                ];
+                for (let i = 0; i < mensajes3.length; i++) {
+                    let angulo = (i * (360 / mensajes3.length));
+                    document.write(`<div class="planet" style="transform: rotate(${angulo}deg) translate(350px) rotate(-${angulo}deg);"><div class="floating-bubble">🌟 ${mensajes3[i]}</div></div>`);
+                }
+            </script>
+        </div>
+
+        <!-- ÓRBITA 4 (Externa masiva con más de 50 mensajes adicionales: ¡Más de 100 en total!) -->
         <div class="orbit-system orbit-4">
             <div class="orbit-ring"></div>
             <script>
-                document.write(
-                    '<div class="planet" style="transform: rotate(15deg) translate(470deg) rotate(-15deg);"><div class="floating-bubble">Eres mi todo</div></div>' +
-                    '<div class="planet" style="transform: rotate(35deg) translate(470deg) rotate(-35deg);"><div class="floating-bubble">Mi gran amor</div></div>' +
-                    '<div class="planet" style="transform: rotate(55deg) translate(470deg) rotate(-55deg);"><div class="floating-bubble">Cada día más juntos</div></div>' +
-                    '<div class="planet" style="transform: rotate(75deg) translate(470deg) rotate(-75deg);"><div class="floating-bubble">Sueño contigo</div></div>' +
-                    '<div class="planet" style="transform: rotate(95deg) translate(470deg) rotate(-95deg);"><div class="floating-bubble">Te adoro con el alma</div></div>' +
-                    '<div class="planet" style="transform: rotate(115deg) translate(470deg) rotate(-115deg);"><div class="floating-bubble">Mi dulce Jhoselin</div></div>' +
-                    '<div class="planet" style="transform: rotate(135deg) translate(470deg) rotate(-135deg);"><div class="floating-bubble">Luz en mi vida</div></div>' +
-                    '<div class="planet" style="transform: rotate(155deg) translate(470deg) rotate(-155deg);"><div class="floating-bubble">Corazón enamorado</div></div>' +
-                    '<div class="planet" style="transform: rotate(175deg) translate(470deg) rotate(-175deg);"><div class="floating-bubble">Eres única en el mundo</div></div>' +
-                    '<div class="planet" style="transform: rotate(195deg) translate(470deg) rotate(-195deg);"><div class="floating-bubble">Mi refugio seguro</div></div>' +
-                    '<div class="planet" style="transform: rotate(215deg) translate(470deg) rotate(-215deg);"><div class="floating-bubble">Para siempre tuyo</div></div>' +
-                    '<div class="planet" style="transform: rotate(235deg) translate(470deg) rotate(-235deg);"><div class="floating-bubble">Te amo por siempre</div></div>' +
-                    '<div class="planet" style="transform: rotate(255deg) translate(470deg) rotate(-255deg);"><div class="floating-bubble">Mi amor eterno</div></div>' +
-                    '<div class="planet" style="transform: rotate(275deg) translate(470deg) rotate(-275deg);"><div class="floating-bubble">Eres mi universo entero</div></div>' +
-                    '<div class="planet" style="transform: rotate(295deg) translate(470deg) rotate(-295deg);"><div class="floating-bubble">Te amo sin medidas</div></div>' +
-                    '<div class="planet" style="transform: rotate(315deg) translate(470deg) rotate(-315deg);"><div class="floating-bubble">Mi felicidad eres tú</div></div>' +
-                    '<div class="planet" style="transform: rotate(335deg) translate(470deg) rotate(-335deg);"><div class="floating-bubble">Nuestra historia de amor</div></div>' +
-                    '<div class="planet" style="transform: rotate(355deg) translate(470deg) rotate(-355deg);"><div class="floating-bubble">Feliz aniversario</div></div>'
-                );
+                const mensajes4 = [
+                    "Te amo con locura", "Mi cielo entero", "Eres tan perfecta", "Dueña de mis días", "Amor de mi vida",
+                    "A tu lado todo es mejor", "Mi dulce tesoro", "Contigo hasta viejitos", "Te pienso a cada segundo", "Eres mi ilusión",
+                    "Mi razón de sonreír", "Ojos de mi vida", "Abrazarte es mi paz", "Besarte es tocar el cielo", "Mi hermosa casualidad",
+                    "Te amo hoy y siempre", "Eres mi bendición", "Mi compañera ideal", "Juntos contra el mundo", "Mi amor bonito",
+                    "Eres mi galaxia", "Tu sonrisa me eleva", "Mi latido favorito", "Te anhelo tanto", "Eres mi hogar",
+                    "Mi dulce paz", "Amor sin límites", "Mi mayor alegría", "Eres mi norte", "Contigo la vida brilla",
+                    "Mi princesa hermosa", "Te amo con el alma", "Eres mi paz mental", "Mi gran debilidad", "Sueño con tus besos",
+                    "Mi dulce compañía", "Eres mi poema", "Te amo sin condiciones", "Mi dulce refugio", "Eres mi gran anhelo",
+                    "Mi destino favorito", "Te amo eternamente", "Mi dulce estrella", "Eres mi paz y calma", "Mi dulce inspiración",
+                    "Te amo por siempre", "Mi gran bendición", "Eres mi sol", "Mi vida entera es tuya", "Feliz 1er aniversario"
+                ];
+                for (let i = 0; i < mensajes4.length; i++) {
+                    let angulo = (i * (360 / mensajes4.length));
+                    document.write(`<div class="planet" style="transform: rotate(${angulo}deg) translate(450px) rotate(-${angulo}deg);"><div class="floating-bubble">💫 ${mensajes4[i]}</div></div>`);
+                }
             </script>
         </div>
 
