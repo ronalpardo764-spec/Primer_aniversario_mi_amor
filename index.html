@@ -78,83 +78,6 @@
             text-align: center;
             pointer-events: none;
         }
-
-        /* Corazón y mensaje central fijo */
-        .universe-sun {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-            z-index: 40;
-            pointer-events: none;
-            animation: heartbeat 2s infinite;
-        }
-
-        .heart-shape {
-            background-color: #ff1744;
-            display: inline-block;
-            height: 60px;
-            margin: 0 10px;
-            position: relative;
-            transform: rotate(-45deg);
-            width: 60px;
-            box-shadow: 0 0 30px rgba(255, 23, 68, 0.9);
-        }
-
-        .heart-shape:before,
-        .heart-shape:after {
-            content: "";
-            background-color: #ff1744;
-            border-radius: 50%;
-            height: 60px;
-            position: absolute;
-            width: 60px;
-        }
-
-        .heart-shape:before { top: -30px; left: 0; }
-        .heart-shape:after { left: 30px; top: 0; }
-
-        .sun-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: white;
-            text-shadow: 0 0 10px rgba(0,0,0,0.9);
-            white-space: nowrap;
-            z-index: 45;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 6px 14px;
-            border-radius: 20px;
-        }
-
-        @keyframes heartbeat {
-            0% { transform: translate(-50%, -50%) scale(1); }
-            30% { transform: translate(-50%, -50%) scale(1.1); }
-            50% { transform: translate(-50%, -50%) scale(1); }
-            70% { transform: translate(-50%, -50%) scale(1.1); }
-            100% { transform: translate(-50%, -50%) scale(1); }
-        }
-
-        /* Barra de instrucciones inferior idéntica al video */
-        .instruction-bar {
-            position: absolute;
-            bottom: 25px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(15, 15, 15, 0.85);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            color: #ddd;
-            z-index: 50;
-            pointer-events: none;
-            box-shadow: 0 0 15px rgba(0,0,0,0.8);
-        }
     </style>
 </head>
 <body>
@@ -166,16 +89,7 @@
     </div>
 
     <div class="cuadro-amarillo">
-        Eres mi universo ✨
-    </div>
-
-    <div class="universe-sun">
-        <div class="heart-shape"></div>
-        <div class="sun-text">Te amo Jhoselin ❤️</div>
-    </div>
-
-    <div class="instruction-bar">
-        🖱️ Arrastra para girar el Universo 3D | Pasa sobre las fotos
+        Eres mi universo y mi pasión eterna ✨
     </div>
 
     <div id="canvas-container"></div>
@@ -186,70 +100,41 @@
 
     <script>
         let scene, camera, renderer, controls;
-        let orbits = [];
+        let galaxyGroup;
 
-        const listaMensajes = [
-            "Te amo infinito", "Mi dulce amor", "Eres mi paz", "Ojos bellos", "Mi princesa", 
-            "Por siempre juntos", "Contigo soy feliz", "Mi gran fortuna", "Te necesito hoy", "Amor verdadero", 
-            "Mi compañera", "Eres arte puro", "Sonrisa hermosa", "Mi gran tesoro", "Te pienso siempre", 
-            "Dueña de mi alma", "Mi destino eres tú", "Magia pura", "Abrazo eterno", "Besos infinitos", 
-            "Mi otra mitad", "Juntos la eternidad", "Te amo mi vida", "Primer aniversario", "Eres mi todo", 
-            "Mi gran amor", "Cada día más", "Sueño contigo", "Te adoro", "Mi dulce Jhoselin", 
-            "Luz en mi vida", "Corazón mío", "Eres única", "Mi refugio", "Para siempre", 
-            "Te amo sin fin", "Mi felicidad", "Nuestra historia", "Feliz aniversario", "Te amo muchísimo",
-            "Te amo con locura", "Mi cielo entero", "Eres tan perfecta", "Dueña de mis días", "Amor de mi vida",
-            "A tu lado todo es mejor", "Mi dulce tesoro", "Contigo hasta viejitos", "Te pienso a cada segundo", "Eres mi ilusión",
-            "Mi razón de sonreír", "Ojos de mi vida", "Abrazarte es mi paz", "Besarte es tocar el cielo", "Mi hermosa casualidad",
-            "Te amo hoy y siempre", "Eres mi bendición", "Mi compañera ideal", "Juntos contra el mundo", "Mi amor bonito",
-            "Eres mi galaxia", "Tu sonrisa me eleva", "Mi latido favorito", "Te anhelo tanto", "Eres mi hogar",
-            "Mi dulce paz", "Amor sin límites", "Mi mayor alegría", "Eres mi norte", "Contigo la vida brilla",
-            "Mi princesa hermosa", "Te amo con el alma", "Eres mi paz mental", "Mi gran debilidad", "Sueño con tus besos",
-            "Mi dulce compañía", "Eres mi poema", "Te amo sin condiciones", "Mi dulce refugio", "Eres mi gran anhelo",
-            "Mi destino favorito", "Te amo eternamente", "Mi dulce estrella", "Eres mi paz y calma", "Mi dulce inspiración",
-            "Te amo por siempre", "Mi gran bendición", "Eres mi sol", "Mi vida entera es tuya", "Feliz 1er aniversario"
+        const mensajesNube = [
+            "Te amo infinitamente", "Mi corazón te elige", "Eres mi sueño hecho realidad", "Te amo su sonrisa",
+            "Mi corazón es tuyo", "Eres mi galaxia entera", "Te amaré por siempre", "Amor de mi vida",
+            "Eres el amor de mi vida", "Eternamente tuyo", "Amo tu voz", "Amo cada detalle tuyo",
+            "Mi único y verdadero amor", "Tus besos son mi adicción", "Me haces bien al alma", "Mi lugar seguro eres tú",
+            "Siento mariposas contigo", "Te elijo hoy y siempre", "Mi corazón late fuerte por ti", "Contigo aprendí a amar",
+            "No te cambio por nada", "Eres mi paz y mi refugio", "Mi dulce casualidad", "Por una eternidad a tu lado",
+            "Cada latido es tuyo", "Eres mi sol", "Mi gran fortuna", "Te necesito en mi vida", "Amor verdadero",
+            "Mi compañera perfecta", "Eres arte puro", "Mi gran tesoro", "Te pienso siempre", "Dueña de mi alma",
+            "Mi destino eres tú", "Magia pura a tu lado", "Abrazo eterno", "Besos infinitos", "Mi otra mitad",
+            "Juntos por la eternidad", "Te amo mi vida", "Primer aniversario", "Eres mi todo", "Mi gran amor",
+            "Cada día más unidos", "Sueño contigo siempre", "Te adoro con el alma", "Mi dulce Jhoselin", "Luz de mis ojos"
         ];
 
         function crearTextoTexture(texto) {
             const canvas = document.createElement('canvas');
-            canvas.width = 256;
-            canvas.height = 64;
+            canvas.width = 320;
+            canvas.height = 80;
             const ctx = canvas.getContext('2d');
 
-            ctx.fillStyle = 'rgba(15, 15, 15, 0.9)';
-            ctx.strokeStyle = '#ff5252';
-            ctx.lineWidth = 3;
+            ctx.fillStyle = 'rgba(10, 10, 10, 0.75)';
+            ctx.strokeStyle = '#ff3366';
+            ctx.lineWidth = 4;
             ctx.beginPath();
-            ctx.roundRect(10, 10, 236, 44, 15);
+            ctx.roundRect(5, 5, 310, 70, 18);
             ctx.fill();
             ctx.stroke();
 
-            ctx.fillStyle = '#ff8a80';
-            ctx.font = 'Bold 16px Arial';
+            ctx.fillStyle = '#ff99aa';
+            ctx.font = 'Bold 20px Arial';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(texto, 128, 32);
-
-            return new THREE.CanvasTexture(canvas);
-        }
-
-        function crearMarcoPolaroid(texture) {
-            const canvas = document.createElement('canvas');
-            canvas.width = 256;
-            canvas.height = 320;
-            const ctx = canvas.getContext('2d');
-
-            // Fondo tarjeta estilo Polaroid rojiza oscura
-            ctx.fillStyle = '#140a0a';
-            ctx.strokeStyle = '#ff1744';
-            ctx.lineWidth = 6;
-            ctx.fillRect(0, 0, 256, 320);
-            ctx.strokeRect(0, 0, 256, 320);
-
-            // Dibujar la imagen dentro del marco
-            const img = texture.image;
-            if (img) {
-                ctx.drawImage(img, 15, 15, 226, 226);
-            }
+            ctx.fillText(texto, 160, 40);
 
             return new THREE.CanvasTexture(canvas);
         }
@@ -258,8 +143,8 @@
             const container = document.getElementById('canvas-container');
             scene = new THREE.Scene();
 
-            camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 2000);
-            camera.position.set(0, 220, 500); // Vista en perspectiva inclinada idéntica al video
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
+            camera.position.set(0, 0, 500);
 
             renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
@@ -268,76 +153,89 @@
 
             controls = new THREE.OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
-            controls.dampingFactor = 0.05;
-            controls.rotateSpeed = 0.8;
+            controls.dampingFactor = 0.04;
+            controls.rotateSpeed = 0.7;
 
-            // Estrellas de fondo
-            const starsGeometry = new THREE.BufferGeometry();
-            const starsCount = 1500;
-            const starPositions = new Float32Array(starsCount * 3);
-            for(let i=0; i<starsCount*3; i++) {
-                starPositions[i] = (Math.random() - 0.5) * 1800;
+            // Galaxia principal que rota suavemente
+            galaxyGroup = new THREE.Group();
+            scene.add(galaxyGroup);
+
+            // Partículas de estrellas rojas y blancas en el fondo
+            const particleCount = 2000;
+            const geometry = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+            const colors = new Float32Array(particleCount * 3);
+
+            const colorRed = new THREE.Color(0xff1744);
+            const colorWhite = new THREE.Color(0xffffff);
+
+            for (let i = 0; i < particleCount * 3; i += 3) {
+                positions[i] = (Math.random() - 0.5) * 1400;
+                positions[i + 1] = (Math.random() - 0.5) * 1400;
+                positions[i + 2] = (Math.random() - 0.5) * 1400;
+
+                const mixedColor = Math.random() > 0.4 ? colorRed : colorWhite;
+                colors[i] = mixedColor.r;
+                colors[i + 1] = mixedColor.g;
+                colors[i + 2] = mixedColor.b;
             }
-            starsGeometry.setAttribute('position', new THREE.BufferAttribute(starPositions, 3));
-            const starsMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 1.5 });
-            const starField = new THREE.Points(starsGeometry, starsMaterial);
-            scene.add(starField);
 
-            const textureLoader = new THREE.TextureLoader();
-            const fotosUrls = ['foto1.jpg', 'foto2.jpg', 'foto3.jpg', 'foto4.jpg'];
+            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-            // Crear 4 Órbitas 3D inclinadas con anillos visibles
-            const radiors = [140, 230, 320, 410];
-            const speeds = [0.008, -0.006, 0.005, -0.004];
-            const tilts = [0.2, -0.3, 0.15, -0.2]; // Inclinación 3D característica del video
-
-            radiors.forEach((radius, idx) => {
-                const orbitGroup = new THREE.Group();
-                orbitGroup.rotation.x = tilts[idx];
-                orbitGroup.rotation.z = tilts[idx] * 0.5;
-                scene.add(orbitGroup);
-
-                // Anillo brillante de la órbita
-                const ringGeo = new THREE.RingGeometry(radius - 0.8, radius + 0.8, 128);
-                const ringMat = new THREE.MeshBasicMaterial({ color: 0xff3366, side: THREE.DoubleSide, transparent: true, opacity: 0.25 });
-                const ringMesh = new THREE.Mesh(ringGeo, ringMat);
-                ringMesh.rotation.x = Math.PI / 2;
-                orbitGroup.add(ringMesh);
-
-                // Cantidad de elementos por órbita
-                let itemsCount = idx === 1 ? 8 : (idx === 0 ? 6 : 28);
-                
-                for(let i=0; i<itemsCount; i++) {
-                    const angle = (i / itemsCount) * Math.PI * 2;
-                    let mesh;
-
-                    // En la órbita 2 colocamos las 4 fotos con marco Polaroid
-                    if (idx === 1 && i < 4) {
-                        const fotoUrl = fotosUrls[i];
-                        textureLoader.load(fotoUrl, (loadedTex) => {
-                            const polaroidTex = crearMarcoPolaroid(loadedTex);
-                            const geo = new THREE.PlaneGeometry(50, 62);
-                            const mat = new THREE.MeshBasicMaterial({ map: polaroidTex, side: THREE.DoubleSide });
-                            const photoMesh = new THREE.Mesh(geo, mat);
-                            photoMesh.position.set(Math.cos(angle) * radius, 0, Math.sin(angle) * radius);
-                            orbitGroup.add(photoMesh);
-                        });
-                        continue;
-                    } else {
-                        // Mensajes de amor distribuidos
-                        const msg = listaMensajes[(idx * 25 + i) % listaMensajes.length];
-                        const textTex = crearTextoTexture(msg);
-                        const geo = new THREE.PlaneGeometry(45, 12);
-                        const mat = new THREE.MeshBasicMaterial({ map: textTex, transparent: true, side: THREE.DoubleSide });
-                        mesh = new THREE.Mesh(geo, mat);
-                    }
-
-                    mesh.position.set(Math.cos(angle) * radius, 0, Math.sin(angle) * radius);
-                    orbitGroup.add(mesh);
-                }
-
-                orbits.push({ group: orbitGroup, speed: speeds[idx] });
+            const material = new THREE.PointsMaterial({
+                size: 3,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.8
             });
+
+            const particleSystem = new THREE.Points(geometry, material);
+            galaxyGroup.add(particleSystem);
+
+            // Cargar tus 4 fotos y distribuirlas flotando en el centro
+            const textureLoader = new THREE.TextureLoader();
+            const fotos = ['foto1.jpg', 'foto2.jpg', 'foto3.jpg', 'foto4.jpg'];
+            
+            fotos.forEach((fotoUrl, index) => {
+                const angle = (index / fotos.length) * Math.PI * 2;
+                const distance = 130;
+                const x = Math.cos(angle) * distance;
+                const z = Math.sin(angle) * distance;
+                const y = (Math.random() - 0.5) * 60;
+
+                textureLoader.load(fotoUrl, (texture) => {
+                    const planeGeo = new THREE.PlaneGeometry(90, 110);
+                    const planeMat = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide });
+                    const photoMesh = new THREE.Mesh(planeGeo, planeMat);
+                    photoMesh.position.set(x, y, z);
+                    galaxyGroup.add(photoMesh);
+                });
+            });
+
+            // Distribuir más de 100 mensajes flotando en la nube esférica tridimensional
+            for (let i = 0; i < 110; i++) {
+                const msg = mensajesNube[i % mensajesNube.length];
+                const textTex = crearTextoTexture(msg);
+                const planeGeo = new THREE.PlaneGeometry(90, 24);
+                const planeMat = new THREE.MeshBasicMaterial({ map: textTex, transparent: true, side: THREE.DoubleSide });
+                
+                const mesh = new THREE.Mesh(planeGeo, planeMat);
+
+                // Posición aleatoria en esfera 3D alrededor del centro
+                const u = Math.random();
+                const v = Math.random();
+                const theta = u * 2.0 * Math.PI;
+                const phi = Math.acos(2.0 * v - 1.0);
+                const r = 180 + Math.random() * 220;
+
+                const x = r * Math.sin(phi) * Math.cos(theta);
+                const y = r * Math.sin(phi) * Math.sin(theta);
+                const z = r * Math.cos(phi);
+
+                mesh.position.set(x, y, z);
+                galaxyGroup.add(mesh);
+            }
 
             window.addEventListener('resize', onWindowResize);
             animate();
@@ -352,15 +250,18 @@
         function animate() {
             requestAnimationFrame(animate);
 
-            orbits.forEach(orbit => {
-                orbit.group.rotation.y += orbit.speed;
-                // Mantener los textos legibles orientados hacia la cámara
-                orbit.group.children.forEach(child => {
-                    if (child.type === "Mesh" && child.geometry.type !== "RingGeometry") {
+            // Rotación suave y constante de toda la galaxia 3D
+            if (galaxyGroup) {
+                galaxyGroup.rotation.y += 0.002;
+                galaxyGroup.rotation.x += 0.0008;
+
+                // Hacer que todos los textos e imágenes siempre miren hacia la cámara
+                galaxyGroup.children.forEach(child => {
+                    if (child.type === "Mesh") {
                         child.lookAt(camera.position);
                     }
                 });
-            });
+            }
 
             controls.update();
             renderer.render(scene, camera);
