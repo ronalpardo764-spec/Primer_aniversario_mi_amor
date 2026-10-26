@@ -57,84 +57,118 @@
             position: relative;
             width: 100%;
             height: 100%;
-            display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        /* Cuadro amarillo para "Eres mi universo" */
-        .cuadro-amarillo {
+        /* Centro del universo: Te amo Jhoselin con forma de corazón */
+        .universe-center {
             position: absolute;
-            top: 8%;
+            top: 50%;
             left: 50%;
-            transform: translateX(-50%);
-            background-color: #ffeb3b;
-            color: #000;
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 1.5rem;
-            font-weight: bold;
-            box-shadow: 0 0 15px rgba(255, 235, 59, 0.6);
-            z-index: 10;
+            transform: translate(-50%, -50%);
+            background-color: #d32f2f;
+            color: white;
+            padding: 20px 30px;
+            border-radius: 50% 50% 0 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            box-shadow: 0 0 30px rgba(211, 47, 47, 0.9);
+            z-index: 20;
             text-align: center;
         }
 
-        /* Contenedor de imágenes principales con mensajes más grandes */
+        .universe-center span {
+            display: block;
+            transform: rotate(45deg);
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        /* Órbita estilo sistema solar */
+        .orbit-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 450px;
+            height: 450px;
+            transform: translate(-50%, -50%);
+            animation: rotateOrbit 25s linear infinite;
+            pointer-events: none;
+            z-index: 15;
+        }
+
+        @keyframes rotateOrbit {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .orbit-item {
+            position: absolute;
+            font-size: 0.9rem;
+            color: #ff8a80;
+            white-space: nowrap;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 5px 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(211, 47, 47, 0.5);
+            transform: rotate(0deg);
+            animation: counterRotate 25s linear infinite;
+        }
+
+        @keyframes counterRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(-360deg); }
+        }
+
+        /* Posiciones de los mensajes en la órbita */
+        .item-1 { top: 0%; left: 50%; transform: translate(-50%, 0); }
+        .item-2 { bottom: 0%; left: 50%; transform: translate(-50%, 0); }
+        .item-3 { top: 50%; left: 0%; transform: translate(0, -50%); }
+        .item-4 { top: 50%; right: 0%; transform: translate(0, -50%); }
+        .item-5 { top: 15%; left: 15%; }
+        .item-6 { top: 15%; right: 15%; }
+        .item-7 { bottom: 15%; left: 15%; }
+        .item-8 { bottom: 15%; right: 15%; }
+
+        /* Galería de imágenes abajo */
         .gallery-container {
             position: absolute;
+            bottom: 20px;
+            width: 100%;
             display: flex;
-            gap: 20px;
+            gap: 15px;
             justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            z-index: 5;
-            max-width: 80%;
+            z-index: 25;
         }
 
         .memory-card {
-            background: rgba(20, 20, 20, 0.85);
+            background: rgba(20, 20, 20, 0.9);
             border: 2px solid #d32f2f;
-            border-radius: 12px;
-            padding: 15px;
+            border-radius: 10px;
+            padding: 10px;
             text-align: center;
-            width: 220px;
+            width: 180px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
 
         .memory-card img {
             width: 100%;
-            height: 150px;
+            height: 110px;
             object-fit: cover;
-            border-radius: 8px;
+            border-radius: 6px;
         }
 
         .memory-card p {
-            font-size: 1.1rem;
-            margin-top: 10px;
+            font-size: 0.85rem;
+            margin-top: 8px;
             font-weight: bold;
             color: #ff8a80;
-        }
-
-        /* Lluvia de corazones / texto flotante de fondo */
-        .floating-text {
-            position: absolute;
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.9rem;
-            animation: float 10s linear infinite;
-            white-space: nowrap;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(100vh) scale(0.8); opacity: 0; }
-            20% { opacity: 1; }
-            80% { opacity: 1; }
-            100% { transform: translateY(-10vh) scale(1.2); opacity: 0; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Pantalla de inicio con el nombre corregido -->
+    <!-- Pantalla de inicio -->
     <div id="screen-start" onclick="iniciarExperiencia()">
         <div class="btn-start">
             Primer aniversario que celebramos, te amo Jhoselin ❤️
@@ -144,36 +178,42 @@
     <!-- Contenido principal -->
     <div id="main-content" style="display: none;">
         
-        <!-- Cuadro amarillo en la posición superior -->
-        <div class="cuadro-amarillo">
-            Eres mi universo ✨
+        <!-- Centro del universo (Corazón con Te amo Jhoselin) -->
+        <div class="universe-center">
+            <span>Te amo Jhoselin ❤️</span>
         </div>
 
-        <!-- 4 Imágenes con mensajes más grandes -->
+        <!-- Sistema solar de mensajes giratorios -->
+        <div class="orbit-container">
+            <div class="orbit-item item-1">✨ Eres mi universo</div>
+            <div class="orbit-item item-2">💖 Mi lugar seguro eres tú</div>
+            <div class="orbit-item item-3">🌟 Cada sonrisa tuya es magia</div>
+            <div class="orbit-item item-4">🌹 Juntos por siempre</div>
+            <div class="orbit-item item-5">💫 Mi vida entera</div>
+            <div class="orbit-item item-6">I Love You</div>
+            <div class="orbit-item item-7">Te anhelo cada día</div>
+            <div class="orbit-item item-8">Por una eternidad</div>
+        </div>
+
+        <!-- 4 Imágenes corregidas con extensión .jpeg -->
         <div class="gallery-container">
             <div class="memory-card">
-                <img src="foto1.jpg" alt="Foto 1">
-                <p>Nuestro primer gran momento juntos</p>
+                <img src="foto1.jpeg" alt="Foto 1">
+                <p>Nuestro primer gran momento</p>
             </div>
             <div class="memory-card">
-                <img src="foto2.jpg" alt="Foto 2">
-                <p>Cada sonrisa a tu lado es magia</p>
+                <img src="foto2.jpeg" alt="Foto 2">
+                <p>Cada sonrisa a tu lado</p>
             </div>
             <div class="memory-card">
-                <img src="foto3.jpg" alt="Foto 3">
+                <img src="foto3.jpeg" alt="Foto 3">
                 <p>Contigo el tiempo se detiene</p>
             </div>
             <div class="memory-card">
-                <img src="foto4.jpg" alt="Foto 4">
-                <p>Por una eternidad más a tu lado</p>
+                <img src="foto4.jpeg" alt="Foto 4">
+                <p>Por una eternidad más</p>
             </div>
         </div>
-
-        <!-- Elementos flotantes de fondo -->
-        <div class="floating-text" style="left: 10%; animation-duration: 12s;">Te amo muchísimo ❤️</div>
-        <div class="floating-text" style="left: 30%; animation-duration: 9s;">Mi lugar seguro eres tú</div>
-        <div class="floating-text" style="left: 70%; animation-duration: 14s;">Juntos por siempre</div>
-        <div class="floating-text" style="left: 85%; animation-duration: 11s;">Mi vida entera 💖</div>
     </div>
 
     <!-- Audio de fondo -->
@@ -188,12 +228,10 @@
             var mainContent = document.getElementById('main-content');
             var music = document.getElementById('background-music');
 
-            // Reproducir música al hacer clic
             music.play().catch(error => {
-                console.log("Reproducción de audio bloqueada por el navegador:", error);
+                console.log("Reproducción de audio bloqueada:", error);
             });
 
-            // Transición de pantallas
             screenStart.style.opacity = '0';
             setTimeout(function() {
                 screenStart.style.display = 'none';
